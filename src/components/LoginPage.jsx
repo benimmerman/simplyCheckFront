@@ -4,16 +4,14 @@ import axiosInstance from "../services/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../state/userSlice";
+// import { getCSRFToken } from "../helpers/getCSRFToken";
 
 const Login = () => {
-
-  axiosInstance.defaults.withCredentials = true;
   // create navigate to use for nav
   const navigate = useNavigate();
-  // create userInfo from global state "state", userSlice named "userInfo"
-  // const userInfo = useSelector((state) => state.userInfo);
   // create dispatch to save values globally
   const dispatch = useDispatch();
+
   // dict to hold user info locally
   const [userInfoLocal, setUserInfoLocal] = useState({
     page: "signIn",
@@ -24,7 +22,6 @@ const Login = () => {
   });
   // handle errors to display for user
   const [errorMessage, setErrorMessage] = useState("");
-
   // update local data from user input into sign in and register forms
   const updateForm = (e, key) => [
     setUserInfoLocal({ ...userInfoLocal, [key]: e.target.value }),
@@ -33,7 +30,7 @@ const Login = () => {
   // for submitting log in credentials for sign in and register
   const handleFormSubmit = (e, API_URL) => {
     e.preventDefault();
-    const payload = 
+    const payload =
       userInfoLocal.page === "signUp"
         ? {
             username: userInfoLocal.username,
@@ -47,18 +44,17 @@ const Login = () => {
           };
 
     axiosInstance
-      .post(
-        API_URL, payload
-      )
+      .post(API_URL, payload)
       .then((res) => {
+        localStorage.setItem("access_token", res.data.access);
+        localStorage.setItem("refresh_token", res.data.refresh);
+        
         dispatch(
           loginUser({
-            username: res.data.username,
-            userId: res.data.userId,
-            csrfToken: res.data.csrfToken,
+            username: userInfoLocal.username,
           })
         );
-        localStorage.setItem("csrfToken", res.data.csrfToken);
+        console.log(localStorage['access_token'])
         navigate("/home");
       })
       .catch((err) => {
@@ -139,7 +135,7 @@ const Login = () => {
               <div className="flex flex-col justify-center">
                 <button
                   className="px-4 py-2 border-2 border-transparent shadow-md hover:border-sky-400 hover:shadow-[0_0_15px_3px_rgba(56,189,248,0.6)] active:scale-95 transition-all duration-200 ease-in-out bg-white bg-opacity-30 backdrop-filter rounded-xl text-sky-700 font-semibold"
-                  onClick={(e) => handleFormSubmit(e, "login/")}
+                  onClick={(e) => handleFormSubmit(e, "api/token/")}
                 >
                   Login
                 </button>

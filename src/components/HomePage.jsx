@@ -20,18 +20,13 @@ const HomePage = () => {
   console.log(["userInfo:", userInfo]);
 
   useEffect(() => {
-    if (!userInfo.userId) {
+    if (!userInfo.username) {
       navigate("/");
     }
   }, [userInfo, navigate]);
 
-  // const csrfToken = localStorage.getItem("csrftoken");
-
-  // axiosInstance.defaults.headers["X-CSRFToken"] = csrfToken;
-  // axiosInstance.defaults.withCredentials=true;
-
   useEffect(() => {
-    if (userInfo?.userId) {
+    if (userInfo?.username) {
       axiosInstance
         .get(API_URL)
         .then((res) => {

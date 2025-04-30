@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../state/userSlice";
 import axiosInstance from "../services/axiosInstance";
+// import { getCSRFToken } from "../helpers/getCSRFToken";
 // import axios from "axios";
 
 const Header = () => {
@@ -35,12 +36,20 @@ const Header = () => {
     };
   }, [showLogoutConfirm]);
 
-  const handleLogout = () => {
-    // Clear user info in Redux
+  const handleLogout = async () => {
+    try {
+      await axiosInstance.post("api/token/logout/", {
+        refresh: localStorage.getItem("refresh_token"),
+      });
+    } catch (err) {
+      console.error("Logout error:", err);
+    }
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
     dispatch(logoutUser());
-    axiosInstance.get('logout/')
     navigate("/");
   };
+
 
   return (
     <>
