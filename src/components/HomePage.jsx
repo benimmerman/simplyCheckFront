@@ -6,15 +6,11 @@ import { useSelector } from "react-redux";
 
 const HomePage = () => {
   const API_URL = "home/";
-
   const LIST_API_URL = "list/";
-
   // create navigate to use for nav
   const navigate = useNavigate();
-
   // create dispatch to save values globally
   // const dispatch = useDispatch();
-
   // create userInfo from global state "state", userSlice named "userInfo"
   const userInfo = useSelector((state) => state.userInfo);
   console.log(["userInfo:", userInfo]);
@@ -39,11 +35,11 @@ const HomePage = () => {
   }, [userInfo]);
 
   const handleNewList = () => {
-    // axiosInstance
-    //   .get(LIST_API_URL,{
-    //     params: {
-    //     }
-    //   });
+    axiosInstance
+      .post(LIST_API_URL)
+      .then((res)=> {
+        console.log(res)
+      });
   };
 
   return (
