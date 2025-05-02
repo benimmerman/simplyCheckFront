@@ -1,10 +1,40 @@
-import React, { useState } from "react";
-// import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import axiosInstance from '../services/axiosInstance';
 import { TrashIcon } from "@heroicons/react/24/outline";
+import { useSelector } from "react-redux";
+// import { useNavigate } from "react-router-dom";
+// import { useDispatch } from "react-redux";
 
 export const Checklist = () => {
+  // // create navigate to use for nav
+  // const navigate = useNavigate();
+  // // create dispatch to save values globally
+  // const dispatch = useDispatch();
+  
+
   const [listItems, setListItems] = useState([]);
   const [inputValue, setInputValue] = useState("");
+  const [listTitle, setListTitle] = useState("Checklist");
+
+  const userInfo = useSelector((state) => state.userInfo);
+  const listInfo = useSelector((state) => state.listInfo);
+  const LIST_API_URL = "list/";
+
+  // request sent to fetch all the lists owned by the user
+  useEffect(() => {
+    if (userInfo?.username) {
+      axiosInstance
+        .get(LIST_API_URL, {
+          listId: listInfo.listId,
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.error("Failed to fetch home data", err);
+        });
+    }
+  }, [userInfo, listInfo.listId]);
 
   // save whole input as inputValue
   const handleInputChange = (e) => {
@@ -12,11 +42,16 @@ export const Checklist = () => {
   };
 
   // adds inputValue to listItems when user presses enter key and inputValue has valid characters
-  const handlePressEnter = (e) => {
+  const handleNewItem = (e) => {
     const checkValid = inputValue.trim().length > 0;
     if (e.key === "Enter" && checkValid) {
-      setListItems([...listItems, { name: inputValue }]);
-      setInputValue("");
+      // setListItems([...listItems, { name: inputValue }]);
+      // setInputValue("");
+      axiosInstance.post(`${LIST_API_URL}${listInfo.listId}/`, {
+        listItem: inputValue,
+        listId: listInfo.listId,
+        createdBy: userInfo.username,
+      });
     }
   };
 
@@ -31,6 +66,36 @@ export const Checklist = () => {
     const updatedItems = [...listItems];
     updatedItems[index] = { ...updatedItems[index], name: e.target.value };
     setListItems(updatedItems);
+  };
+
+  const handleTitleChange = (e) => {
+    setListTitle(e.target.value);
+  };
+
+  const handleSaveTitle = (e) => {
+    if (e.key === "Enter") {
+      console.log(["list title:", listTitle]);
+      axiosInstance
+        .post(LIST_API_URL, {
+          listTitle: listTitle,
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          if (err.response && err.response.data.message) {
+            console.error("Backend message:", err.response.data.message);
+            // setErrorMessage(err.response.data.message);
+          } else if (err.request) {
+            console.error("No response from server:", err.request);
+            // setErrorMessage("No response from server. Please try again.");
+          } else {
+            console.error("Error:", err.message);
+            // setErrorMessage("An error occurred. Please try again.");
+          }
+        });
+      e.target.blur();
+    }
   };
 
   // listRow component is an object to not have to share state between components
@@ -58,16 +123,20 @@ export const Checklist = () => {
 
   return (
     <div className="bg-sky-100 bg-opacity-40 backdrop-filter rounded-3xl shadow-lg mt-4 p-6 space-y-3">
-      <h2 className="text-xl font-semibold text-center text-gray-700">
-        Checklist
-      </h2>
-      {/* input box- click to type, enter to submit to create a row */}
-      <div className="rounded-xl  w-full">
+      <input
+        value={listTitle}
+        type="text"
+        className="flex justify-self-center bg-transparent outline-none text-xl font-semibold text-center text-gray-700"
+        onChange={(e) => handleTitleChange(e)}
+        onKeyDown={(e) => handleSaveTitle(e)}
+      />
+      {/* new item input box - click to type, enter to submit to create a row */}
+      <div className="rounded-xl w-full">
         <input
           value={inputValue}
           placeholder="press enter to add"
           onChange={handleInputChange}
-          onKeyDown={(e) => handlePressEnter(e)}
+          onKeyDown={(e) => handleNewItem(e)}
           className="bg-white shadow-sm rounded-xl px-4 py-2 w-full justify-center"
         ></input>
       </div>

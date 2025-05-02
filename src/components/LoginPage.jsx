@@ -4,7 +4,6 @@ import axiosInstance from "../services/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../state/userSlice";
-// import { getCSRFToken } from "../helpers/getCSRFToken";
 
 const Login = () => {
   // create navigate to use for nav
