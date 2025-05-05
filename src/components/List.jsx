@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import axiosInstance from '../services/axiosInstance';
+import React, { useState } from "react";
+import axiosInstance from "../services/axiosInstance";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { useSelector } from "react-redux";
 // import { useNavigate } from "react-router-dom";
@@ -10,7 +10,6 @@ export const Checklist = () => {
   // const navigate = useNavigate();
   // // create dispatch to save values globally
   // const dispatch = useDispatch();
-  
 
   const [listItems, setListItems] = useState([]);
   const [inputValue, setInputValue] = useState("");
@@ -19,22 +18,6 @@ export const Checklist = () => {
   const userInfo = useSelector((state) => state.userInfo);
   const listInfo = useSelector((state) => state.listInfo);
   const LIST_API_URL = "list/";
-
-  // request sent to fetch all the lists owned by the user
-  useEffect(() => {
-    if (userInfo?.username) {
-      axiosInstance
-        .get(LIST_API_URL, {
-          listId: listInfo.listId,
-        })
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.error("Failed to fetch home data", err);
-        });
-    }
-  }, [userInfo, listInfo.listId]);
 
   // save whole input as inputValue
   const handleInputChange = (e) => {
@@ -47,10 +30,10 @@ export const Checklist = () => {
     if (e.key === "Enter" && checkValid) {
       // setListItems([...listItems, { name: inputValue }]);
       // setInputValue("");
-      axiosInstance.post(`${LIST_API_URL}${listInfo.listId}/`, {
+      axiosInstance.post(LIST_API_URL, {
         listItem: inputValue,
         listId: listInfo.listId,
-        createdBy: userInfo.username,
+        username: userInfo.username,
       });
     }
   };
