@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   listId: null,
   listItems: null,
+  fromNewList: false,
 };
 
 const listSlice = createSlice({
@@ -11,10 +12,14 @@ const listSlice = createSlice({
   reducers: {
     selectList: (state, action) => {
       state.listId = action.payload.listId;
+      state.listTitle = action.payload.listTitle;
+      state.fromNewList = action.payload.fromNewList;
     },
     unSelectList: (state) => {
       state.listId = null;
+      state.listTitle = null;
       state.listItems = null;
+      state.fromNewList= false;
     },
     listItems: (state, action) => {
       state.listItems = action.payload.listItems;

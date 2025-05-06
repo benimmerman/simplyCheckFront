@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axiosInstance from "../services/axiosInstance";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { useSelector } from "react-redux";
@@ -6,18 +6,29 @@ import { useSelector } from "react-redux";
 // import { useDispatch } from "react-redux";
 
 export const Checklist = () => {
-  // // create navigate to use for nav
+  // create navigate to use for nav
   // const navigate = useNavigate();
   // // create dispatch to save values globally
   // const dispatch = useDispatch();
 
-  const [listItems, setListItems] = useState([]);
-  const [inputValue, setInputValue] = useState("");
-  const [listTitle, setListTitle] = useState("Checklist");
-
   const userInfo = useSelector((state) => state.userInfo);
   const listInfo = useSelector((state) => state.listInfo);
+
   const LIST_API_URL = "list/";
+
+  const [listItems, setListItems] = useState([]);
+  const [inputValue, setInputValue] = useState("");
+  const [listTitle, setListTitle] = useState(listInfo.listTitle);
+
+  // when page loads retireve all the items for the list
+  useEffect(() => {
+    if (listInfo?.listId) {
+      axiosInstance.get(`${LIST_API_URL}${userInfo.username}/${listInfo.listId}/`)
+      .then((res) => {
+        console.log(res.data)
+      });
+    }
+  })
 
   // save whole input as inputValue
   const handleInputChange = (e) => {
@@ -59,8 +70,10 @@ export const Checklist = () => {
     if (e.key === "Enter") {
       console.log(["list title:", listTitle]);
       axiosInstance
-        .post(LIST_API_URL, {
-          listTitle: listTitle,
+        .put(LIST_API_URL, {
+          username: userInfo.username,
+          newListTitle: listTitle,
+          listId: listInfo.listId,
         })
         .then((res) => {
           console.log(res);

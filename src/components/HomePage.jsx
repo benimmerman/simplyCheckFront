@@ -72,10 +72,11 @@ const HomePage = () => {
         dispatch(
           selectList({
             listId: res.data.listId,
+            listTitle: res.data.listTitle,
+            fromNewList: true,
           })
         );
         navigate("/list");
-        // setUserLists([...userLists, res.data]);
       })
       .catch((err) => console.log(err));
   };
@@ -83,7 +84,8 @@ const HomePage = () => {
   const handleSelectList = (index) => {
     dispatch(
       selectList({
-        listId: userLists.filter((_, i) => i === index),
+        listId: userLists.filter((_, i) => i === index)[0].listId,
+        listTitle: userLists.filter((_, i) => i === index)[0].listTitle,
       })
     );
     navigate("/list");
