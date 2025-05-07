@@ -103,7 +103,18 @@ const HomePage = () => {
         setUserLists(updatedLists);
         setDeleteIndex(null);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        if (err.response && err.response.data.message) {
+          console.error("Backend message:", err.response.data.message);
+          // setErrorMessage(err.response.data.message);
+        } else if (err.request) {
+          console.error("No response from server:", err.request);
+          // setErrorMessage("No response from server. Please try again.");
+        } else {
+          console.error("Error:", err.message);
+          // setErrorMessage("An error occurred. Please try again.");
+        }
+      });
   };
 
   const handleConfirmDelete = (index) => {
