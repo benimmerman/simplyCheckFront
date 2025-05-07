@@ -10,10 +10,11 @@ import ListPage from "./components/ListPage.jsx";
 import HomePage from "./components/HomePage.jsx";
 import Header from "./components/Header.jsx";
 import useAutoLogout from "./hooks/AutoLogout.jsx";
+import SessionWarningModal from "./components/SessionWarningModal.jsx";
 
 const AppWrapper = () => {
 
-  useAutoLogout(10 * 60 * 1000); // 10 mili sec * 60 sec * 1000 = 10 min
+  const showWarning = useAutoLogout(10 * 60 * 1000); // 10 mili sec * 60 sec * 1000 = 10 min
 
   const location = useLocation();
   const hiddenHeaderOn = ["/"];
@@ -22,6 +23,7 @@ const AppWrapper = () => {
   return (
     <>
       {showHeader && <Header />}
+      {showWarning && <SessionWarningModal />}
       <div
         className={`${
           showHeader ? "pt-16 h-[calc(100vh-4rem)] overflow-y-auto" : "h-screen"

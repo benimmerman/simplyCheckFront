@@ -1,36 +1,52 @@
-// AutoLogout.js
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { logoutUser } from "../state/userSlice"; // adjust path as needed
+import { logoutUser } from "../state/userSlice";
 import { useNavigate } from "react-router-dom";
 
-let timer;
-
-const useAutoLogout = (timeout = 60000) => {
-
+const useAutoLogout = (timeout = 600000) => {
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [showWarning, setShowWarning] = useState(false);
 
   useEffect(() => {
+    let logoutTimer;
+    let warningTimer;
+
     const resetTimer = () => {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
+      clearTimeout(logoutTimer);
+      clearTimeout(warningTimer);
+      setShowWarning(false);
+
+      // Show warning 1 minute before timeout
+      warningTimer = setTimeout(() => {
+        setShowWarning(true);
+      }, timeout - 60000);
+
+      logoutTimer = setTimeout(() => {
         dispatch(logoutUser());
-        navigate("/"); // Redirect to login
+        navigate("/");
       }, timeout);
     };
 
     window.addEventListener("mousemove", resetTimer);
     window.addEventListener("keydown", resetTimer);
+    window.addEventListener("click", resetTimer);
+    window.addEventListener("scroll", resetTimer);
 
-    resetTimer(); // Start the timer
+    resetTimer(); // Initialize timers on mount
 
     return () => {
-      clearTimeout(timer);
+      clearTimeout(logoutTimer);
+      clearTimeout(warningTimer);
       window.removeEventListener("mousemove", resetTimer);
       window.removeEventListener("keydown", resetTimer);
+      window.removeEventListener("click", resetTimer);
+      window.removeEventListener("scroll", resetTimer);
     };
   }, [dispatch, navigate, timeout]);
+
+  return showWarning;
 };
 
 export default useAutoLogout;
