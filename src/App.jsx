@@ -26,7 +26,7 @@ const AppWrapper = () => {
       <div
         className={`${
           showHeader ? "pt-16 h-[calc(100vh-4rem)] overflow-y-auto" : "h-screen"
-        } bg-white`}
+        } bg-page/30`}
       >
         <Routes>
           <Route path="/" element={<LoginPage />} />
