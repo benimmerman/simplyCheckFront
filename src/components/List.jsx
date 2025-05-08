@@ -265,7 +265,7 @@ export const Checklist = () => {
             {/* Checkbox on the left */}
             <div className="flex-none mr-2 mt-4 self-center">
               <input
-                className="w-6 h-6 border-4 border-gray-300 rounded-full appearance-none cursor-pointer transition-all duration-300 ease-in-out focus:outline-none checked:bg-sky-500 checked:border-sky-500"
+                className="w-6 h-6 border-2 border-gray-300 rounded-full appearance-none cursor-pointer transition-all duration-300 ease-in-out focus:outline-none checked:bg-dark-purple checked:border-dark-purple"
                 type="checkbox"
                 onChange={() => handleToggleCheckbox(item.listItemId)}
                 checked={item.isDone}
