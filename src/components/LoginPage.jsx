@@ -9,6 +9,7 @@ import {
   LockClosedIcon,
   EnvelopeIcon,
 } from "@heroicons/react/24/solid";
+import { Spinner } from "./helpers/Spinner";
 
 const Login = () => {
   // create navigate to use for nav
@@ -17,6 +18,7 @@ const Login = () => {
   const dispatch = useDispatch();
 
   // variable to show spinner
+  const [showSpinner, setShowSpinner] = useState(false);
 
   // dict to hold user info locally
   const [userInfoLocal, setUserInfoLocal] = useState({
@@ -35,6 +37,8 @@ const Login = () => {
 
   // for submitting log in credentials for sign in and register
   const handleFormSubmit = (e, API_URL) => {
+    // hide button show spinner
+    setShowSpinner(true);
     e.preventDefault();
     const payload =
       userInfoLocal.page === "signUp"
@@ -52,6 +56,8 @@ const Login = () => {
     axiosInstance
       .post(API_URL, payload)
       .then((res) => {
+        // hide spinner show button
+        setShowSpinner(false);
         localStorage.setItem("access_token", res.data.access);
         localStorage.setItem("refresh_token", res.data.refresh);
 
@@ -64,6 +70,8 @@ const Login = () => {
         navigate("/home");
       })
       .catch((err) => {
+        // hide spinner show button
+        setShowSpinner(false);
         console.log(err);
         if (err.response && err.response.data.message) {
           console.error("Backend message:", err.response.data.message);
@@ -142,27 +150,31 @@ const Login = () => {
                       />
                     </div>
                     <div>
-                      <button
-                        className={`mt-2 w-40 uppercase px-6 py-2 rounded-3xl border transition duration-300 ${
-                          userInfoLocal.username === "" ||
-                          userInfoLocal.password === ""
-                            ? "bg-dark-purple/50 border-white text-white cursor-not-allowed"
-                            : "bg-dark-purple border-white text-white hover:bg-dark-purple/90 cursor-pointer"
-                        }`}
-                        onClick={(e) => handleFormSubmit(e, "api/token/")}
-                        disabled={
-                          userInfoLocal.username === "" ||
-                          userInfoLocal.password === ""
-                        }
-                        title={
-                          userInfoLocal.username === "" ||
-                          userInfoLocal.password === ""
-                            ? "Fill out username and password"
-                            : ""
-                        }
-                      >
-                        Log in
-                      </button>
+                      {showSpinner ? (
+                        <Spinner />
+                      ) : (
+                        <button
+                          className={`mt-2 w-40 uppercase px-6 py-2 rounded-3xl border transition duration-300 ${
+                            userInfoLocal.username === "" ||
+                            userInfoLocal.password === ""
+                              ? "bg-dark-purple/50 border-white text-white cursor-not-allowed"
+                              : "bg-dark-purple border-white text-white hover:bg-dark-purple/90 cursor-pointer"
+                          }`}
+                          onClick={(e) => handleFormSubmit(e, "api/token/")}
+                          disabled={
+                            userInfoLocal.username === "" ||
+                            userInfoLocal.password === ""
+                          }
+                          title={
+                            userInfoLocal.username === "" ||
+                            userInfoLocal.password === ""
+                              ? "Fill out username and password"
+                              : ""
+                          }
+                        >
+                          Log in
+                        </button>
+                      )}
                     </div>
                   </div>
                 </>
@@ -253,33 +265,37 @@ const Login = () => {
                       />
                     </div>
                     <div>
-                      <button
-                        className={`mt-2 w-40 uppercase px-6 py-2 rounded-3xl border transition duration-300 ${
-                          userInfoLocal.username === "" ||
-                          userInfoLocal.password === "" ||
-                          userInfoLocal.confirmPass === "" ||
-                          userInfoLocal.email === ""
-                            ? "bg-dark-purple/50 border-white text-white cursor-not-allowed"
-                            : "bg-dark-purple border-white text-white hover:bg-dark-purple/90 cursor-pointer"
-                        }`}
-                        disabled={
-                          userInfoLocal.username === "" ||
-                          userInfoLocal.password === "" ||
-                          userInfoLocal.confirmPass === "" ||
-                          userInfoLocal.email === ""
-                        }
-                        title={
-                          userInfoLocal.username === "" ||
-                          userInfoLocal.password === "" ||
-                          userInfoLocal.confirmPass === "" ||
-                          userInfoLocal.email === ""
-                            ? "Fill out form"
-                            : ""
-                        }
-                      >
-                        {" "}
-                        Sign up
-                      </button>
+                      {showSpinner ? (
+                        <Spinner />
+                      ) : (
+                        <button
+                          className={`mt-2 w-40 uppercase px-6 py-2 rounded-3xl border transition duration-300 ${
+                            userInfoLocal.username === "" ||
+                            userInfoLocal.password === "" ||
+                            userInfoLocal.confirmPass === "" ||
+                            userInfoLocal.email === ""
+                              ? "bg-dark-purple/50 border-white text-white cursor-not-allowed"
+                              : "bg-dark-purple border-white text-white hover:bg-dark-purple/90 cursor-pointer"
+                          }`}
+                          disabled={
+                            userInfoLocal.username === "" ||
+                            userInfoLocal.password === "" ||
+                            userInfoLocal.confirmPass === "" ||
+                            userInfoLocal.email === ""
+                          }
+                          title={
+                            userInfoLocal.username === "" ||
+                            userInfoLocal.password === "" ||
+                            userInfoLocal.confirmPass === "" ||
+                            userInfoLocal.email === ""
+                              ? "Fill out form"
+                              : ""
+                          }
+                        >
+                          {" "}
+                          Sign up
+                        </button>
+                      )}
                     </div>
                   </div>
                 </>
