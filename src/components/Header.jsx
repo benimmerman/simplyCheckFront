@@ -50,7 +50,7 @@ const Header = () => {
         <nav className="relative mx-auto p-4 flex items-center justify-between">
           <div className="flex items-center gap-6">
             <div
-              className="cursor-pointer  sm:ml-20 flex items-center"
+              className="cursor-pointer lg:ml-20 flex items-center"
               onClick={() => navigate("/home")}
             >
               Trackly
