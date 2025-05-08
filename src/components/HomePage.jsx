@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import "../css/index.css";
+import "../index.css";
 import axiosInstance from "../services/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";

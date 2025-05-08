@@ -1,4 +1,4 @@
-import "./css/index.css";
+import "./index.css";
 import {
   BrowserRouter as Router,
   Routes,
@@ -13,7 +13,6 @@ import useAutoLogout from "./hooks/AutoLogout.jsx";
 import SessionWarningModal from "./components/SessionWarningModal.jsx";
 
 const AppWrapper = () => {
-
   const showWarning = useAutoLogout(10 * 60 * 1000); // 10 mili sec * 60 sec * 1000 = 10 min
 
   const location = useLocation();
@@ -44,7 +43,7 @@ const App = () => {
     <Router>
       <AppWrapper />
     </Router>
-  )
-}
+  );
+};
 
 export default App;
