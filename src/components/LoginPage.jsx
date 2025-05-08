@@ -1,15 +1,22 @@
 import React, { useState } from "react";
-import "../css/index.css";
+import "../index.css";
 import axiosInstance from "../services/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../state/userSlice";
+import {
+  UserIcon,
+  LockClosedIcon,
+  EnvelopeIcon,
+} from "@heroicons/react/24/solid";
 
 const Login = () => {
   // create navigate to use for nav
   const navigate = useNavigate();
   // create dispatch to save values globally
   const dispatch = useDispatch();
+
+  // variable to show spinner
 
   // dict to hold user info locally
   const [userInfoLocal, setUserInfoLocal] = useState({
@@ -47,16 +54,17 @@ const Login = () => {
       .then((res) => {
         localStorage.setItem("access_token", res.data.access);
         localStorage.setItem("refresh_token", res.data.refresh);
-        
+
         dispatch(
           loginUser({
             username: userInfoLocal.username,
           })
         );
-        console.log(localStorage['access_token'])
+        console.log(localStorage["access_token"]);
         navigate("/home");
       })
       .catch((err) => {
+        console.log(err);
         if (err.response && err.response.data.message) {
           console.error("Backend message:", err.response.data.message);
           setErrorMessage(err.response.data.message);
@@ -70,158 +78,250 @@ const Login = () => {
       });
   };
 
+  console.log(userInfoLocal.page);
   return (
-    <div className="h-screen flex bg-gray-100 overflow-hidden">
-      <div className="bg-transparent rounded-lg ">
-        <h1 className="text-xl font-semibold text-center text-gray-700 mb-8">
-          Log in to your account
-        </h1>
-        <form
-          className="bg-white bg-opacity-40 backdrop-filter rounded-3xl shadow-lg p-4 space-y-3"
-          // onSubmit={handleFormSubmit(e,)}
-        >
-          {errorMessage && (
+    <>
+      <div className="flex h-screen w-screen bg-page/30 items-center justify-center ">
+        <div className="relative w-full h-full md:max-w-7xl md:h-[600px] md:rounded-2xl overflow-hidden shadow-xl">
+          {/* Sliding Background Panel */}
+          <div className="absolute inset-0 flex flex-col md:flex-row">
+            {/* Sign In Panel */}
             <div
-              className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-              role="alert"
+              className={`md:w-1/2 h-1/2 md:h-full p-10 flex flex-col justify-center items-center transition-all duration-500 ease-in-out z-10 ${
+                userInfoLocal.page !== "signIn"
+                  ? "bg-gradient-to-br from-gray-200 to-purple-500 text-white"
+                  : "opacity-100 bg-white text-dark-purple"
+              }`}
             >
-              <strong className="font-bold">Error</strong>
-              <span className="block sm:inline">{errorMessage}</span>
-              <span
-                className="absolute top-0 bottom-0 right-0 px-4 py-3"
-                onClick={() => setErrorMessage("")}
-              >
-                <svg
-                  className="fill-current h-6 w-6 text-red-500"
-                  role="button"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <title>Close</title>
-                  <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
-                </svg>
-              </span>
+              {userInfoLocal.page !== "signIn" ? (
+                <>
+                  <div className="z-50 flex flex-col p-5 text-white items-center justify-center text-center">
+                    <h2 className="text-3xl font-bold mb-4">Welcome Back!</h2>
+                    <p className="text-sm text-gray-200 mb-6 max-w-xs">
+                      Log in with your Trackly credentials to continue your
+                      journey with us
+                    </p>
+                    <button
+                      onClick={() =>
+                        setUserInfoLocal({ ...userInfoLocal, page: "signIn" })
+                      }
+                      className="cursor-pointer w-40 uppercase px-6 py-2 rounded-3xl border border-white text-white  transition duration-300"
+                    >
+                      Sign in
+                    </button>{" "}
+                  </div>
+                </>
+              ) : (
+                <>
+                  {" "}
+                  <div className="flex flex-col p-5 items-center justify-center space-y-6 text-center text-dark-purple">
+                    {" "}
+                    <h2 className="text-3xl font-bold">Sign In to Trackly</h2>
+                    <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-blue-400">
+                      <UserIcon className="text-gray-400 w-5 h-5" />
+                      <input
+                        onChange={(e) => updateForm(e, "username")}
+                        type="text"
+                        value={userInfoLocal.username}
+                        id="username"
+                        placeholder="Username"
+                        className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
+                      />
+                    </div>
+                    <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-blue-400">
+                      <LockClosedIcon className="text-gray-400 w-5 h-5" />
+                      <input
+                        type="password"
+                        value={userInfoLocal.password}
+                        onChange={(e) => {
+                          updateForm(e, "password");
+                        }}
+                        id="password"
+                        placeholder="Password"
+                        className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
+                      />
+                    </div>
+                    <div>
+                      <button
+                        className={`mt-2 w-40 uppercase px-6 py-2 rounded-3xl border transition duration-300 ${
+                          userInfoLocal.username === "" ||
+                          userInfoLocal.password === ""
+                            ? "bg-dark-purple/50 border-white text-white cursor-not-allowed"
+                            : "bg-dark-purple border-white text-white hover:bg-dark-purple/90 cursor-pointer"
+                        }`}
+                        onClick={(e) => handleFormSubmit(e, "api/token/")}
+                        disabled={
+                          userInfoLocal.username === "" ||
+                          userInfoLocal.password === ""
+                        }
+                        title={
+                          userInfoLocal.username === "" ||
+                          userInfoLocal.password === ""
+                            ? "Fill out username and password"
+                            : ""
+                        }
+                      >
+                        Log in
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
-          )}
 
-          {userInfoLocal.page === "signIn" ? (
-            <>
-              {/* Sign In Page - existing users */}
-              <div>
-                <label htmlFor="username">Username</label>
-                <input
-                  onChange={(e) => {
-                    updateForm(e, "username");
-                  }}
-                  type="username"
-                  id="username"
-                  placeholder="Your username"
-                  className="flex-auto bg-transparent outline-none mx-2 pl-2 text-gray-700 font-semibold"
-                />
-              </div>
-              <div>
-                <label htmlFor="password">Password</label>
-                <input
-                  type="password"
-                  onChange={(e) => {
-                    updateForm(e, "password");
-                  }}
-                  id="password"
-                  placeholder="Your Password"
-                  className="flex-auto bg-transparent outline-none mx-2 pl-2 text-gray-700 font-semibold"
-                />
-              </div>
-              <div className="flex flex-col justify-center">
-                <button
-                  className="px-4 py-2 border-2 border-transparent shadow-md hover:border-sky-400 hover:shadow-[0_0_15px_3px_rgba(56,189,248,0.6)] active:scale-95 transition-all duration-200 ease-in-out bg-white bg-opacity-30 backdrop-filter rounded-xl text-sky-700 font-semibold"
-                  onClick={(e) => handleFormSubmit(e, "api/token/")}
-                >
-                  Login
-                </button>
-                No Account?{" "}
-                <div
-                  className="cursor-pointer"
-                  onClick={() =>
-                    setUserInfoLocal({ ...userInfoLocal, page: "signUp" })
-                  }
-                >
-                  Sign up
-                </div>
-              </div>
-            </>
-          ) : (
-            <>
-              {/* Register Page - NONexisting users */}
-              <div>
-                <label htmlFor="username">Email</label>
-                <input
-                  type="email"
-                  onChange={(e) => {
-                    updateForm(e, "email");
-                  }}
-                  id="email"
-                  placeholder="Email"
-                  className="flex-auto bg-transparent outline-none mx-2 pl-2 text-gray-700 font-semibold"
-                />
-              </div>
-              <div>
-                <label htmlFor="username">Username</label>
-                <input
-                  type="username"
-                  onChange={(e) => {
-                    updateForm(e, "username");
-                  }}
-                  id="username"
-                  placeholder="Your username"
-                  className="flex-auto bg-transparent outline-none mx-2 pl-2 text-gray-700 font-semibold"
-                />
-              </div>
-              <div>
-                <label htmlFor="password">Password</label>
-                <input
-                  type="password"
-                  onChange={(e) => {
-                    updateForm(e, "password");
-                  }}
-                  id="password"
-                  placeholder="Your Password"
-                  className="flex-auto bg-transparent outline-none mx-2 pl-2 text-gray-700 font-semibold"
-                />
-              </div>
-              <div>
-                <label htmlFor="password">Confirm Password</label>
-                <input
-                  type="password"
-                  onChange={(e) => {
-                    updateForm(e, "confirmPass");
-                  }}
-                  id="password"
-                  placeholder="Your Password"
-                  className="flex-auto bg-transparent outline-none mx-2 pl-2 text-gray-700 font-semibold"
-                />
-              </div>
-              <div className="flex flex-col justify-center">
-                <button
-                  className="px-4 py-2 border-2 border-transparent shadow-md hover:border-sky-400 hover:shadow-[0_0_15px_3px_rgba(56,189,248,0.6)] active:scale-95 transition-all duration-200 ease-in-out bg-white bg-opacity-30 backdrop-filter rounded-xl text-sky-700 font-semibold"
-                  onClick={(e) => handleFormSubmit(e, "register/")}
-                >
-                  Register
-                </button>
-                <button
-                  className="pt-4"
-                  onClick={() => {
-                    setUserInfoLocal({ ...userInfoLocal, page: "signIn" });
-                    setErrorMessage("");
-                  }}
-                >
-                  Cancel
-                </button>
-              </div>
-            </>
-          )}
-        </form>
+            {/* Sign Up Panel */}
+
+            <div
+              className={`md:w-1/2 h-1/2 md:h-full p-10 flex flex-col justify-center items-center transition-all duration-500 ease-in-out z-10 ${
+                userInfoLocal.page === "signIn"
+                  ? "bg-gradient-to-br from-gray-200 to-purple-500 text-white"
+                  : "opacity-100 bg-white text-dark-purple"
+              }`}
+            >
+              {userInfoLocal.page === "signIn" ? (
+                <>
+                  <div className="z-50flex flex-col p-5 text-white items-center justify-center text-center">
+                    <h2 className="text-3xl font-bold mb-4">
+                      Welcome to Trackly
+                    </h2>
+                    <p className="text-sm text-gray-200 mb-6 max-w-xs">
+                      Enter your personal details and start your journey with
+                      Trackly
+                    </p>
+                    <button
+                      onClick={() =>
+                        setUserInfoLocal({ ...userInfoLocal, page: "signUp" })
+                      }
+                      className="cursor-pointer w-40 uppercase px-6 py-2 rounded-3xl border border-white text-white  transition duration-300"
+                    >
+                      Sign Up
+                    </button>{" "}
+                  </div>
+                </>
+              ) : (
+                <>
+                  {" "}
+                  <div className="flex flex-col p-5 items-center justify-center space-y-6 text-center text-dark-purple">
+                    {" "}
+                    <h2 className="text-3xl font-bold">Create an Account</h2>
+                    <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-blue-400">
+                      <EnvelopeIcon className="text-gray-400 w-5 h-5" />
+                      <input
+                        onChange={(e) => updateForm(e, "email")}
+                        value={userInfoLocal.email}
+                        type="email"
+                        id="email"
+                        placeholder="Email"
+                        className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
+                      />
+                    </div>
+                    <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-blue-400">
+                      <UserIcon className="text-gray-400 w-5 h-5" />
+                      <input
+                        onChange={(e) => updateForm(e, "username")}
+                        value={userInfoLocal.username}
+                        type="text"
+                        id="username"
+                        placeholder="Username"
+                        className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
+                      />
+                    </div>
+                    <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-blue-400">
+                      <LockClosedIcon className="text-gray-400 w-5 h-5" />
+                      <input
+                        type="password"
+                        value={userInfoLocal.password}
+                        onChange={(e) => {
+                          updateForm(e, "password");
+                        }}
+                        id="password"
+                        placeholder="Password"
+                        className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
+                      />
+                    </div>
+                    <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-blue-400">
+                      <LockClosedIcon className="text-gray-400 w-5 h-5" />
+                      <input
+                        type="password"
+                        value={userInfoLocal.confirmPass}
+                        onChange={(e) => {
+                          updateForm(e, "confirmPass");
+                        }}
+                        id="confirmPass"
+                        placeholder="Confirm Password"
+                        className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
+                      />
+                    </div>
+                    <div>
+                      <button
+                        className={`mt-2 w-40 uppercase px-6 py-2 rounded-3xl border transition duration-300 ${
+                          userInfoLocal.username === "" ||
+                          userInfoLocal.password === "" ||
+                          userInfoLocal.confirmPass === "" ||
+                          userInfoLocal.email === ""
+                            ? "bg-dark-purple/50 border-white text-white cursor-not-allowed"
+                            : "bg-dark-purple border-white text-white hover:bg-dark-purple/90 cursor-pointer"
+                        }`}
+                        disabled={
+                          userInfoLocal.username === "" ||
+                          userInfoLocal.password === "" ||
+                          userInfoLocal.confirmPass === "" ||
+                          userInfoLocal.email === ""
+                        }
+                        title={
+                          userInfoLocal.username === "" ||
+                          userInfoLocal.password === "" ||
+                          userInfoLocal.confirmPass === "" ||
+                          userInfoLocal.email === ""
+                            ? "Fill out form"
+                            : ""
+                        }
+                      >
+                        {" "}
+                        Sign up
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+
+      <div className="h-screen p-4 flex mx-auto w-full overflow-hidden  justify-center">
+        <div className="bg-transparent rounded-lg ">
+          <form
+            className="mt-4 bg-white bg-opacity-40 backdrop-filter rounded-3xl shadow-lg p-4 space-y-3"
+            // onSubmit={handleFormSubmit(e,)}
+          >
+            {errorMessage && (
+              <div
+                className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+                role="alert"
+              >
+                <strong className="font-bold">Error</strong>
+                <span className="block sm:inline">{errorMessage}</span>
+                <span
+                  className="absolute top-0 bottom-0 right-0 px-4 py-3"
+                  onClick={() => setErrorMessage("")}
+                >
+                  <svg
+                    className="fill-current h-6 w-6 text-red-500"
+                    role="button"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                  >
+                    <title>Close</title>
+                    <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
+                  </svg>
+                </span>
+              </div>
+            )}
+          </form>
+        </div>
+      </div>
+    </>
   );
 };
 
