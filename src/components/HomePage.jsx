@@ -26,7 +26,7 @@ const HomePage = () => {
 
   // variable to show spinner
   const [showSpinner, setShowSpinner] = useState(false);
-
+  // reusable style for button
   const modalButtonStyle =
     "flex w-auto justify-center items-center  rounded-md px-3 py-1.5 text-sm font-semibold shadow-sm transition duration-300 p-4";
   // checks if there is a valid username in global state, if not get sent back to home page
@@ -50,6 +50,7 @@ const HomePage = () => {
     }
   }, [userInfo.username]);
 
+  // function to create new list
   const handleNewList = () => {
     axiosInstance
       .post(NEW_LIST_API_URL, {
@@ -68,6 +69,7 @@ const HomePage = () => {
       .catch((err) => console.log(err));
   };
 
+  // function to view list selected
   const handleSelectList = (index) => {
     dispatch(
       selectList({
