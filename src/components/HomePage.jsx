@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { selectList } from "../state/listSlice";
-import { TrashIcon } from "@heroicons/react/24/outline";
+import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 
 const HomePage = () => {
   const HOME_API_URL = "home/";
@@ -122,69 +122,75 @@ const HomePage = () => {
     setShowDeleteConfirm(true);
   };
 
+  console.log(userLists);
   return (
-    <>
-      <div className="flex bg-sky-100 bg-opacity-40 backdrop-filter rounded-3xl shadow-lg mt-4 p-6 space-y-3">
-        <div className="w-28"></div>
-        <div className="grow self-center">
-          <h1 className="justify-center text-xl font-semibold text-center text-gray-700">
-            Home Dashboard
-          </h1>
-        </div>
-        <button
-          className="self-center bg-white bg-opacity-70 py-3 w-28 rounded-xl shadow-md hover:shadow-xl hover:bg-opacity-100 hover:bg-sky-300 transition-all text-gray-700 font-semibold"
-          onClick={handleNewList}
-        >
-          New List
-        </button>
-      </div>
-      <div className="w-full px-8 mt-8 justify-self-center grid h-56 grid-cols-3 content-start gap-4">
-        {userLists.length > 0 &&
-          userLists.map((item, index) => (
-            <div
-              key={index}
-              className="flex justify-self-center w-full bg-sky-100 p-4 rounded-xl text-center text-gray-700 text-lg font-medium shadow-md hover:shadow-xl hover:bg-sky-200 cursor-pointer transition-all"
-            >
-              <div className="w-full " onClick={() => handleSelectList(index)}>
-                {item["listTitle"]}
-              </div>
-              <div className="justify-self-end self-center">
-                <TrashIcon
-                  className="size-5"
-                  onClick={() => handleConfirmDelete(index)}
-                />
-              </div>
-            </div>
-          ))}
-      </div>
-
-      {showDeleteConfirm && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/10 z-50 backdrop-blur-sm transition-opacity duration-200">
-          <div
-            ref={modalRef}
-            className="bg-white rounded-xl shadow-xl p-6 space-y-4 text-center w-72"
-          >
-            <p className="text-gray-800 font-semibold">
-              Are you sure you want to delete?
-            </p>
-            <div className="flex justify-center gap-4">
-              <button
-                className={`${modalButtonStyle} bg-gray-200 text-gray-800 hover:bg-gray-300`}
-                onClick={handleDeleteList}
-              >
-                Yes
-              </button>
-              <button
-                className={`${modalButtonStyle} bg-sky-500 text-white hover:bg-sky-600`}
-                onClick={() => setShowDeleteConfirm(false)}
-              >
-                No
-              </button>
-            </div>
+    <div>
+      <div className="max-w-7xl min-h-full mx-auto justify-center items-center">
+        <div className="mt-2 p-2 mx-5">
+          <div className="font-bold text-3xl  items-center flex">
+            My Dashboard
+            <PencilSquareIcon
+              className="w-6 h-6 ml-2 cursor-pointer"
+              title="Create New List"
+              onClick={handleNewList}
+            />
+          </div>
+          <div className=" text-gray-800 text-lg mt-2">
+            View your existing lists or create a new one.
           </div>
         </div>
-      )}
-    </>
+        <div className="w-full px-8 mt-8  grid h-56 grid-cols-1 content-start gap-4">
+          {userLists.length > 0 &&
+            userLists.map((item, index) => (
+              <div
+                key={index}
+                className="flex  w-full bg-white p-4 rounded-xl  text-gray-700 
+                text-lg font-medium shadow-md hover:shadow-xl hover:bg-white/40 cursor-pointer transition-all"
+              >
+                <div
+                  className="w-full "
+                  onClick={() => handleSelectList(index)}
+                >
+                  {item["listTitle"]}
+                </div>
+                <div className="justify-self-end self-center">
+                  <TrashIcon
+                    className="size-5"
+                    onClick={() => handleConfirmDelete(index)}
+                  />
+                </div>
+              </div>
+            ))}
+        </div>
+
+        {showDeleteConfirm && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black/10 z-50 backdrop-blur-sm transition-opacity duration-200">
+            <div
+              ref={modalRef}
+              className="bg-white rounded-xl shadow-xl p-6 space-y-4 text-center w-72"
+            >
+              <p className="text-gray-800 font-semibold">
+                Are you sure you want to delete?
+              </p>
+              <div className="flex justify-center gap-4">
+                <button
+                  className={`${modalButtonStyle} bg-gray-200 text-gray-800 hover:bg-gray-300`}
+                  onClick={handleDeleteList}
+                >
+                  Yes
+                </button>
+                <button
+                  className={`${modalButtonStyle} bg-sky-500 text-white hover:bg-sky-600`}
+                  onClick={() => setShowDeleteConfirm(false)}
+                >
+                  No
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 
