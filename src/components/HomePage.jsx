@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../index.css";
 import axiosInstance from "../services/axiosInstance";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,8 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { selectList } from "../state/listSlice";
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
+import Modal from "./helpers/Modal";
+import { Spinner } from "./helpers/Spinner";
 
 const HomePage = () => {
   const HOME_API_URL = "home/";
@@ -19,12 +21,14 @@ const HomePage = () => {
   const userInfo = useSelector((state) => state.userInfo);
   // const listInfo = useSelector((state) => state.listInfo);
   const [userLists, setUserLists] = useState({});
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showModal, setshowModal] = useState(false);
   const [deleteIndex, setDeleteIndex] = useState(null);
-  const modalRef = useRef(null);
+
+  // variable to show spinner
+  const [showSpinner, setShowSpinner] = useState(false);
 
   const modalButtonStyle =
-    "px-4 py-2 rounded-xl font-semibold shadow-md hover:shadow-xl transition-all";
+    "flex w-auto justify-center items-center  rounded-md px-3 py-1.5 text-sm font-semibold shadow-sm transition duration-300 p-4";
   // checks if there is a valid username in global state, if not get sent back to home page
   useEffect(() => {
     if (!userInfo.username) {
@@ -45,23 +49,6 @@ const HomePage = () => {
         });
     }
   }, [userInfo.username]);
-
-  // Close modal if user clicks outside of it
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
-        setShowDeleteConfirm(false);
-      }
-    };
-
-    if (showDeleteConfirm) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showDeleteConfirm]);
 
   const handleNewList = () => {
     axiosInstance
@@ -91,8 +78,11 @@ const HomePage = () => {
     navigate("/list");
   };
 
+  // function to delete a list
   const handleDeleteList = () => {
-    setShowDeleteConfirm(false);
+    // showSpinner
+    setShowSpinner(true);
+
     axiosInstance
       .delete(DELETE_LIST_API_URL, {
         params: { listId: userLists[deleteIndex].listId },
@@ -102,8 +92,14 @@ const HomePage = () => {
         updatedLists.splice(deleteIndex, 1);
         setUserLists(updatedLists);
         setDeleteIndex(null);
+        // hide spinner and modal
+        setShowSpinner(false);
+        setshowModal(false);
       })
       .catch((err) => {
+        // hide spinner and modal
+        setShowSpinner(false);
+        setshowModal(false);
         if (err.response && err.response.data.message) {
           console.error("Backend message:", err.response.data.message);
           // setErrorMessage(err.response.data.message);
@@ -119,7 +115,7 @@ const HomePage = () => {
 
   const handleConfirmDelete = (index) => {
     setDeleteIndex(index);
-    setShowDeleteConfirm(true);
+    setshowModal(true);
   };
 
   console.log(userLists);
@@ -163,31 +159,34 @@ const HomePage = () => {
             ))}
         </div>
 
-        {showDeleteConfirm && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/10 z-50 backdrop-blur-sm transition-opacity duration-200">
-            <div
-              ref={modalRef}
-              className="bg-white rounded-xl shadow-xl p-6 space-y-4 text-center w-72"
-            >
-              <p className="text-gray-800 font-semibold">
-                Are you sure you want to delete?
-              </p>
-              <div className="flex justify-center gap-4">
+        {showModal && (
+          <Modal
+            isOpen={showModal}
+            onClose={() => setshowModal(false)}
+            title="Delete List?"
+          >
+            <p className="text-sm px-6 text-gray-600">
+              Deleting this list will permanently remove it.
+            </p>
+            <div className="mt-4 sm:absolute sm:bottom-2 border-t space-x-4 pt-4 border-gray-200 left-0 right-3 flex justify-end">
+              <button
+                className={`${modalButtonStyle}  bg-white border-2 text-gray-500 uppercase  hover:bg-gray-500 hover:text-white`}
+                onClick={() => setshowModal(false)}
+              >
+                Cancel
+              </button>
+              {showSpinner ? (
+                <Spinner />
+              ) : (
                 <button
-                  className={`${modalButtonStyle} bg-gray-200 text-gray-800 hover:bg-gray-300`}
+                  className={`${modalButtonStyle} bg-dark-purple text-white uppercase hover:bg-dark-purple/70`}
                   onClick={handleDeleteList}
                 >
-                  Yes
+                  Delete
                 </button>
-                <button
-                  className={`${modalButtonStyle} bg-sky-500 text-white hover:bg-sky-600`}
-                  onClick={() => setShowDeleteConfirm(false)}
-                >
-                  No
-                </button>
-              </div>
+              )}
             </div>
-          </div>
+          </Modal>
         )}
       </div>
     </div>
