@@ -25,8 +25,8 @@ const AppWrapper = () => {
       {showWarning && <SessionWarningModal />}
       <div
         className={`${
-          showHeader ? "pt-16 h-[calc(100vh-4rem)] overflow-y-auto" : "h-screen"
-        } bg-page/30`}
+          showHeader && "pt-16 overflow-y-auto "
+        } bg-page/30 h-screen`}
       >
         <Routes>
           <Route path="/" element={<LoginPage />} />
