@@ -10,6 +10,7 @@ import {
   EnvelopeIcon,
 } from "@heroicons/react/24/solid";
 import { Spinner } from "./helpers/Spinner";
+import { AlertBanner } from "./helpers/alerts";
 
 const Login = () => {
   // create navigate to use for nav
@@ -86,7 +87,7 @@ const Login = () => {
       });
   };
 
-  console.log(userInfoLocal.page);
+  console.log(errorMessage);
   return (
     <>
       <div className="flex h-screen w-screen bg-page/30 items-center justify-center ">
@@ -125,6 +126,15 @@ const Login = () => {
                   <div className="flex flex-col p-5 items-center justify-center space-y-6 text-center text-dark-purple">
                     {" "}
                     <h2 className="text-3xl font-bold">Sign In to Trackly</h2>
+                    {/* if error show banner */}
+                    {errorMessage && (
+                      <AlertBanner
+                        type="error"
+                        message={"Invalid username or password."}
+                        dismissible={true}
+                        setErrorMessage={setErrorMessage}
+                      />
+                    )}
                     <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
                       <UserIcon className="text-gray-400 w-5 h-5" />
                       <input
@@ -216,6 +226,15 @@ const Login = () => {
                   <div className="flex flex-col p-5 items-center justify-center space-y-6 text-center text-dark-purple">
                     {" "}
                     <h2 className="text-3xl font-bold">Create an Account</h2>
+                    {/* if error show banner */}
+                    {errorMessage && (
+                      <AlertBanner
+                        type="error"
+                        message={"An error occured, please try again."}
+                        dismissible={true}
+                        setErrorMessage={setErrorMessage}
+                      />
+                    )}
                     <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
                       <EnvelopeIcon className="text-gray-400 w-5 h-5" />
                       <input
