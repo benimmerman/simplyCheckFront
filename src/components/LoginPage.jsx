@@ -135,57 +135,62 @@ const Login = () => {
                         setErrorMessage={setErrorMessage}
                       />
                     )}
-                    <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
-                      <UserIcon className="text-gray-400 w-5 h-5" />
-                      <input
-                        onChange={(e) => updateForm(e, "username")}
-                        type="text"
-                        value={userInfoLocal.username}
-                        id="username"
-                        placeholder="Username"
-                        className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
-                      />
-                    </div>
-                    <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
-                      <LockClosedIcon className="text-gray-400 w-5 h-5" />
-                      <input
-                        type="password"
-                        value={userInfoLocal.password}
-                        onChange={(e) => {
-                          updateForm(e, "password");
-                        }}
-                        id="password"
-                        placeholder="Password"
-                        className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
-                      />
-                    </div>
-                    <div>
-                      {showSpinner ? (
-                        <Spinner />
-                      ) : (
-                        <button
-                          className={`mt-2 w-40 uppercase px-6 py-2 rounded-3xl border transition duration-300 ${
-                            userInfoLocal.username === "" ||
-                            userInfoLocal.password === ""
-                              ? "bg-dark-purple/50 border-white text-white cursor-not-allowed"
-                              : "bg-dark-purple border-white text-white hover:bg-dark-purple/90 cursor-pointer"
-                          }`}
-                          onClick={(e) => handleFormSubmit(e, "api/token/")}
-                          disabled={
-                            userInfoLocal.username === "" ||
-                            userInfoLocal.password === ""
-                          }
-                          title={
-                            userInfoLocal.username === "" ||
-                            userInfoLocal.password === ""
-                              ? "Fill out username and password"
-                              : ""
-                          }
-                        >
-                          Log in
-                        </button>
-                      )}
-                    </div>
+                    <form
+                      onSubmit={(e) => handleFormSubmit(e, "api/token/")}
+                      className="flex flex-col space-y-6 items-center w-full"
+                    >
+                      <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
+                        <UserIcon className="text-gray-400 w-5 h-5" />
+                        <input
+                          onChange={(e) => updateForm(e, "username")}
+                          type="text"
+                          value={userInfoLocal.username}
+                          id="username"
+                          placeholder="Username"
+                          className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
+                        />
+                      </div>
+                      <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
+                        <LockClosedIcon className="text-gray-400 w-5 h-5" />
+                        <input
+                          type="password"
+                          value={userInfoLocal.password}
+                          onChange={(e) => {
+                            updateForm(e, "password");
+                          }}
+                          id="password"
+                          placeholder="Password"
+                          className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
+                        />
+                      </div>
+                      <div>
+                        {showSpinner ? (
+                          <Spinner />
+                        ) : (
+                          <button
+                            className={`mt-2 w-40 uppercase px-6 py-2 rounded-3xl border transition duration-300 ${
+                              userInfoLocal.username === "" ||
+                              userInfoLocal.password === ""
+                                ? "bg-dark-purple/50 border-white text-white cursor-not-allowed"
+                                : "bg-dark-purple border-white text-white hover:bg-dark-purple/90 cursor-pointer"
+                            }`}
+                            onClick={(e) => handleFormSubmit(e, "api/token/")}
+                            disabled={
+                              userInfoLocal.username === "" ||
+                              userInfoLocal.password === ""
+                            }
+                            title={
+                              userInfoLocal.username === "" ||
+                              userInfoLocal.password === ""
+                                ? "Fill out username and password"
+                                : ""
+                            }
+                          >
+                            Log in
+                          </button>
+                        )}
+                      </div>
+                    </form>
                   </div>
                 </>
               )}
