@@ -125,7 +125,7 @@ const Login = () => {
                   <div className="flex flex-col p-5 items-center justify-center space-y-6 text-center text-dark-purple">
                     {" "}
                     <h2 className="text-3xl font-bold">Sign In to Trackly</h2>
-                    <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-blue-400">
+                    <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
                       <UserIcon className="text-gray-400 w-5 h-5" />
                       <input
                         onChange={(e) => updateForm(e, "username")}
@@ -136,7 +136,7 @@ const Login = () => {
                         className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
                       />
                     </div>
-                    <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-blue-400">
+                    <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
                       <LockClosedIcon className="text-gray-400 w-5 h-5" />
                       <input
                         type="password"
@@ -216,7 +216,7 @@ const Login = () => {
                   <div className="flex flex-col p-5 items-center justify-center space-y-6 text-center text-dark-purple">
                     {" "}
                     <h2 className="text-3xl font-bold">Create an Account</h2>
-                    <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-blue-400">
+                    <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
                       <EnvelopeIcon className="text-gray-400 w-5 h-5" />
                       <input
                         onChange={(e) => updateForm(e, "email")}
@@ -227,7 +227,7 @@ const Login = () => {
                         className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
                       />
                     </div>
-                    <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-blue-400">
+                    <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
                       <UserIcon className="text-gray-400 w-5 h-5" />
                       <input
                         onChange={(e) => updateForm(e, "username")}
@@ -238,7 +238,7 @@ const Login = () => {
                         className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
                       />
                     </div>
-                    <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-blue-400">
+                    <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
                       <LockClosedIcon className="text-gray-400 w-5 h-5" />
                       <input
                         type="password"
@@ -251,7 +251,7 @@ const Login = () => {
                         className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
                       />
                     </div>
-                    <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-blue-400">
+                    <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
                       <LockClosedIcon className="text-gray-400 w-5 h-5" />
                       <input
                         type="password"
