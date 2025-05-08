@@ -30,7 +30,12 @@ const typeConfig = {
   },
 };
 
-export const AlertBanner = ({ type = "info", message, dismissible = true }) => {
+export const AlertBanner = ({
+  type = "info",
+  message,
+  dismissible = true,
+  setErrorMessage,
+}) => {
   const [visible, setVisible] = useState(true);
   const { icon, bg, text } = typeConfig[type] || typeConfig.info;
 
@@ -46,7 +51,10 @@ export const AlertBanner = ({ type = "info", message, dismissible = true }) => {
       </div>
       {dismissible && (
         <button
-          onClick={() => setVisible(false)}
+          onClick={() => {
+            setVisible(false);
+            setErrorMessage(false);
+          }}
           className="text-xl font-bold ml-4"
         >
           <XMarkIcon className="w-5 h-5 text-gray-500 hover:text-gray-700" />
