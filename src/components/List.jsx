@@ -238,25 +238,25 @@ export const Checklist = () => {
   console.log(["sortListItems", sortListItems]);
 
   return (
-    <div className="bg-sky-100 bg-opacity-40 backdrop-filter rounded-3xl shadow-lg mt-4 p-6 space-y-3">
-      <input
-        value={listTitle}
-        type="text"
-        className="flex justify-self-center bg-transparent outline-none text-xl font-semibold text-center text-gray-700"
-        onChange={(e) => handleTitleEdit(e)}
-        onKeyDown={(e) => handleSaveTitle(e)}
-      />
-
-      {/* new item input box - click to type, enter to submit to create a row */}
-      <div className="rounded-xl w-full">
+    <div className="max-w-7xl mx-auto  bg-opacity-40 backdrop-filter  mt-4 p-6 space-y-3">
+      <div className="items-start justify-start text-uranian-blue text-center flex">
         <input
-          value={inputValue}
-          placeholder="Press enter to add to list"
-          onChange={handleInputChange}
-          onKeyDown={(e) => handleNewItem(e)}
-          className="bg-white shadow-sm rounded-xl px-4 py-2 w-full justify-center"
-        ></input>
+          value={listTitle}
+          className="bg-transparent outline-none text-3xl font-semibold "
+          type="text"
+          onChange={(e) => handleTitleEdit(e)}
+          onKeyDown={(e) => handleSaveTitle(e)}
+        />
       </div>
+      {/* new item input box - click to type, enter to submit to create a row */}
+      <textarea
+        value={inputValue}
+        placeholder="Press enter to add item to list"
+        onChange={handleInputChange}
+        rows={2}
+        onKeyDown={(e) => handleNewItem(e)}
+        className="bg-white shadow-sm rounded-xl px-4 py-2 w-full justify-center focus:outline-none focus:border-dark-purple focus:ring-2 focus:ring-dark-purple"
+      />
 
       {/* row display in the checklist, uses listRow component */}
       {listItems.length > 0 &&
