@@ -3,8 +3,8 @@ import { Checklist } from "./List";
 
 const ListPage = () => {
   return (
-    <div className="bg-white h-screen">
-      <div className="mx-auto max-w-md">
+    <div className=" h-screen">
+      <div className="mx-auto">
         <Checklist />
       </div>
     </div>
