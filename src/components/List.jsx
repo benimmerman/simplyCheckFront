@@ -208,7 +208,11 @@ export const Checklist = () => {
   // listRow component is an object to not have to share state between components
   const listRow = (item) => {
     return (
-      <div className="border-2 border-transparent has-[input:focus]:border-sky-300 has-[input:focus]:shadow-[0_0_10px_2px_rgba(59,130,246,0.5)] transition-all duration-200 ease-in-out flex bg-opacity-30 backdrop-filter pl-4 pr-8 py-2 mt-2 rounded-xl shadow-md hover:shadow-xl">
+      <div
+        className="has-[input:focus]:border-dark-purple has-[input:focus]:border-2
+      rounded-xl transition-all flex bg-opacity-30 backdrop-filter p-3 mt-2
+       hover:shadow-xl border-b border-gray-200 "
+      >
         <input
           value={item.itemName}
           key={item.listItemId}
