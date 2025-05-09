@@ -153,8 +153,7 @@ export const Checklist = () => {
     setListTitle(e.target.value);
   };
 
-  const handleSaveTitle = (e) => {
-    if (e.key === "Enter") {
+  const handleSaveTitle = () => {
       console.log(["list title:", listTitle]);
       axiosInstance
         .put(LIST_API_URL, {
@@ -179,9 +178,20 @@ export const Checklist = () => {
             // setErrorMessage("An error occurred. Please try again.");
           }
         });
+  };
+
+  const handleTitleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSaveTitle();
       e.target.blur();
     }
   };
+
+  const handleTitleBlur = () => {
+    handleSaveTitle();
+  };
+
 
   const handleToggleCheckbox = (itemId) => {
     // Find the current item
@@ -250,7 +260,8 @@ export const Checklist = () => {
           className="bg-transparent outline-none text-3xl font-semibold "
           type="text"
           onChange={(e) => handleTitleEdit(e)}
-          onKeyDown={(e) => handleSaveTitle(e)}
+          onKeyDown={(e) => handleTitleKeyDown(e)}
+          onBlur={handleTitleBlur}
         />
       </div>
       {/* new item input box - click to type, enter to submit to create a row */}
