@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   listId: null,
   listItems: null,
+  listTitle: null,
   fromNewList: false,
 };
 

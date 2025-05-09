@@ -23,6 +23,7 @@ const HomePage = () => {
   const [userLists, setUserLists] = useState({});
   const [showModal, setshowModal] = useState(false);
   const [deleteIndex, setDeleteIndex] = useState(null);
+  const [deleteTitle, setDeleteTitle] = useState(null);
 
   // variable to show spinner
   const [showSpinner, setShowSpinner] = useState(false);
@@ -43,6 +44,7 @@ const HomePage = () => {
         .get(HOME_API_URL)
         .then((res) => {
           setUserLists(res.data.lists);
+          // console.log(['userLists', userLists])
         })
         .catch((err) => {
           console.error("Failed to fetch home data", err);
@@ -115,7 +117,8 @@ const HomePage = () => {
       });
   };
 
-  const handleConfirmDelete = (index) => {
+  const handleConfirmDelete = (item, index) => {
+    setDeleteTitle(item.listTitle)
     setDeleteIndex(index);
     setshowModal(true);
   };
@@ -154,7 +157,7 @@ const HomePage = () => {
                 <div className="justify-self-end self-center">
                   <TrashIcon
                     className="size-5"
-                    onClick={() => handleConfirmDelete(index)}
+                    onClick={() => handleConfirmDelete(item, index)}
                   />
                 </div>
               </div>
@@ -168,7 +171,7 @@ const HomePage = () => {
             title="Delete List?"
           >
             <p className="text-sm px-6 text-gray-600">
-              Deleting this list will permanently remove it.
+              Deleting {deleteTitle} will permanently remove it.
             </p>
             <div className="mt-4 sm:absolute sm:bottom-2 border-t space-x-4 pt-4 border-gray-200 left-0 right-3 flex justify-end">
               <button

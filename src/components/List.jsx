@@ -5,24 +5,19 @@ import { useSelector } from "react-redux";
 // eslint-disable-next-line no-unused-vars
 import { AnimatePresence, motion } from "framer-motion";
 
-// import { useNavigate } from "react-router-dom";
-// import { useDispatch } from "react-redux";
-
 export const Checklist = () => {
-  // create navigate to use for nav
-  // const navigate = useNavigate();
-  // // create dispatch to save values globally
-  // const dispatch = useDispatch();
-
+  const LIST_API_URL = "list/";
+  const initialTouched = {
+    title: false,
+    newItem: false,
+    existingItem: false,
+  };
   const userInfo = useSelector((state) => state.userInfo);
   const listInfo = useSelector((state) => state.listInfo);
-
-  const LIST_API_URL = "list/";
-
   const [listItems, setListItems] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [listTitle, setListTitle] = useState(listInfo.listTitle);
-  const [touched, setTouched] = useState(false)
+  const [touched, setTouched] = useState(initialTouched);
 
   // when page loads retireve all the items for the list
   useEffect(() => {
@@ -62,7 +57,7 @@ export const Checklist = () => {
 
   // adds inputValue to listItems when user presses enter key and inputValue has valid characters
   const handleNewItem = (e) => {
-    const checkValid = inputValue.trim().length > 0;
+    const checkValid = inputValue.trim().length > 0 && inputValue.trim().length <=1000;
     if (e.key === "Enter" && checkValid) {
       axiosInstance
         .post(LIST_API_URL, {
@@ -81,6 +76,7 @@ export const Checklist = () => {
             },
           ]);
           console.log(res.data);
+          setTouched({ ...touched, newItem: false });
           setInputValue("");
         })
         .catch((err) => {
@@ -122,31 +118,30 @@ export const Checklist = () => {
     );
 
     setListItems(updatedList);
-    // setEditedValues((prev) => ({
-    //   ...prev,
-    //   [listItemId]: e.target.value,
-    // }));
   };
 
   // update listItams when an existing value is changed in the listRow
   const handleSaveItem = (listItemId, updatedFields) => {
     const item = listItems.find((i) => i.listItemId === listItemId);
-    if (!item) return;
-    console.log(["updatedFields", updatedFields]);
-    axiosInstance
-      .put(LIST_API_URL, {
-        updateType: "item",
-        username: userInfo.username,
-        id: listItemId,
-        ...updatedFields,
-      })
-      .then((res) => {
-        console.log(res);
-        console.log(["listItems", listItems]);
-      })
-      .catch((err) => {
-        console.error("Error updating item:", err);
-      });
+    const itemCheckValid =
+      item.itemName.trim().length > 0 && item.itemName.trim().length <= 1000;
+    if (itemCheckValid) {
+      axiosInstance
+        .put(LIST_API_URL, {
+          updateType: "item",
+          username: userInfo.username,
+          id: listItemId,
+          ...updatedFields,
+        })
+        .then((res) => {
+          console.log(['handle save itm res:',res]);
+          setTouched({ ...touched, existingItem: false });
+        })
+        .catch((err) => {
+          console.error("Error updating item:", err);
+        });
+    }
+      
   };
 
   const handleTitleEdit = (e) => {
@@ -154,30 +149,29 @@ export const Checklist = () => {
   };
 
   const handleSaveTitle = () => {
-      console.log(["list title:", listTitle]);
-      axiosInstance
-        .put(LIST_API_URL, {
-          updateType: "title",
-          username: userInfo.username,
-          newListTitle: listTitle,
-          listId: listInfo.listId,
-        })
-        .then((res) => {
-          console.log(["save title res", res.data]);
-          setListTitle(res.data.listTitle);
-        })
-        .catch((err) => {
-          if (err.response && err.response.data.message) {
-            console.error("Backend message:", err.response.data.message);
-            // setErrorMessage(err.response.data.message);
-          } else if (err.request) {
-            console.error("No response from server:", err.request);
-            // setErrorMessage("No response from server. Please try again.");
-          } else {
-            console.error("Error:", err.message);
-            // setErrorMessage("An error occurred. Please try again.");
-          }
-        });
+    axiosInstance
+      .put(LIST_API_URL, {
+        updateType: "title",
+        username: userInfo.username,
+        newListTitle: listTitle,
+        listId: listInfo.listId,
+      })
+      .then((res) => {
+        setListTitle(res.data.listTitle);
+        setTouched({ ...touched, title: false });
+      })
+      .catch((err) => {
+        if (err.response && err.response.data.message) {
+          console.error("Backend message:", err.response.data.message);
+          // setErrorMessage(err.response.data.message);
+        } else if (err.request) {
+          console.error("No response from server:", err.request);
+          // setErrorMessage("No response from server. Please try again.");
+        } else {
+          console.error("Error:", err.message);
+          // setErrorMessage("An error occurred. Please try again.");
+        }
+      });
   };
 
   const handleTitleKeyDown = (e) => {
@@ -191,7 +185,6 @@ export const Checklist = () => {
   const handleTitleBlur = () => {
     handleSaveTitle();
   };
-
 
   const handleToggleCheckbox = (itemId) => {
     // Find the current item
@@ -219,29 +212,42 @@ export const Checklist = () => {
   // listRow component is an object to not have to share state between components
   const listRow = (item) => {
     return (
-      <div
-        className="has-[input:focus]:border-dark-purple has-[input:focus]:border-2
-      rounded-xl transition-all flex bg-opacity-30 backdrop-filter p-3 mt-2
-       hover:shadow-xl border-b border-gray-200 "
-      >
-        <input
-          value={item.itemName}
-          key={item.listItemId}
-          type="text"
-          className={`flex-auto self-center bg-transparent outline-none mx-2 pl-2 font-semibold ${
-            item.isDone ? "text-gray-400" : "text-gray-700"
+      <>
+        <div
+          className="has-[input:focus]:border-dark-purple has-[input:focus]:border-2
+        rounded-xl transition-all flex bg-opacity-30 backdrop-filter p-3 mt-2
+        hover:shadow-xl border-b border-gray-200 "
+        >
+          <input
+            value={item.itemName}
+            key={item.listItemId}
+            type="text"
+            className={`flex-auto self-center bg-transparent outline-none mx-2 pl-2 font-semibold ${
+              item.isDone ? "text-gray-400" : "text-gray-700"
+            }`}
+            onChange={(e) => handleItemEdit(e, item.listItemId)}
+            onFocus={() => setTouched({ ...touched, existingItem: true })}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleSaveItem(item.listItemId, {
+                  itemName: listItems[item.listItemId] ?? item.itemName,
+                });
+                e.target.blur();
+              }
+            }}
+          />
+        </div>
+        <p
+          className={`text-red-500 text-xs flex items-center mt-1 w-full px-4 ${
+            touched.existingItem && item.itemName.length > 1000
+              ? "visible h-[1.25rem]"
+              : "invisible h-0"
           }`}
-          onChange={(e) => handleItemEdit(e, item.listItemId)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              handleSaveItem(item.listItemId, {
-                itemName: listItems[item.listItemId] ?? item.itemName,
-              });
-              e.target.blur();
-            }
-          }}
-        />
-      </div>
+        >
+          <ExclamationCircleIcon className="w-4 h-4 mr-1" />
+          too long
+        </p>
+      </>
     );
   };
 
@@ -271,12 +277,12 @@ export const Checklist = () => {
         onChange={handleInputChange}
         rows={2}
         onKeyDown={(e) => handleNewItem(e)}
-        onBlur={() => setTouched(true)}
+        onFocus={() => setTouched({ ...touched, newItem: true })}
         className="bg-white shadow-sm rounded-xl px-4 py-2 w-full justify-center focus:outline-none focus:border-dark-purple focus:ring-2 focus:ring-dark-purple"
       />
       <p
         className={`text-red-500 text-xs flex items-center mt-1 w-full px-4 ${
-          touched && inputValue.length > 1000
+          touched.newItem && inputValue.length > 1000
             ? "visible h-[1.25rem]"
             : "invisible h-0"
         }`}
