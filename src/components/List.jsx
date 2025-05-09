@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../services/axiosInstance";
-import { TrashIcon } from "@heroicons/react/24/outline";
+import { TrashIcon, ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import { useSelector } from "react-redux";
 // eslint-disable-next-line no-unused-vars
 import { AnimatePresence, motion } from "framer-motion";
@@ -22,6 +22,7 @@ export const Checklist = () => {
   const [listItems, setListItems] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [listTitle, setListTitle] = useState(listInfo.listTitle);
+  const [touched, setTouched] = useState(false)
 
   // when page loads retireve all the items for the list
   useEffect(() => {
@@ -259,9 +260,19 @@ export const Checklist = () => {
         onChange={handleInputChange}
         rows={2}
         onKeyDown={(e) => handleNewItem(e)}
+        onBlur={() => setTouched(true)}
         className="bg-white shadow-sm rounded-xl px-4 py-2 w-full justify-center focus:outline-none focus:border-dark-purple focus:ring-2 focus:ring-dark-purple"
       />
-
+      <p
+        className={`text-red-500 text-xs flex items-center mt-1 w-full px-4 ${
+          touched && inputValue.length > 1000
+            ? "visible h-[1.25rem]"
+            : "invisible h-0"
+        }`}
+      >
+        <ExclamationCircleIcon className="w-4 h-4 mr-1" />
+        List item must not exceed 1000 characters.
+      </p>
       {/* row display in the checklist, uses listRow component */}
       {listItems.length > 0 &&
         sortListItems.map((item) => (
