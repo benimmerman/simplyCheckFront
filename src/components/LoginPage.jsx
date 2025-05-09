@@ -10,7 +10,7 @@ import {
   EnvelopeIcon,
 } from "@heroicons/react/24/solid";
 import { Spinner } from "./helpers/Spinner";
-import { AlertBanner } from "./helpers/alerts";
+import { AlertBanner } from "./helpers/Alerts";
 
 const Login = () => {
   // create navigate to use for nav
