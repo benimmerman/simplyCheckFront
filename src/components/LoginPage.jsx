@@ -138,7 +138,12 @@ const Login = () => {
               ) : (
                 <>
                   <div className="flex flex-col p-5 items-center justify-center space-y-6 text-center text-dark-purple">
-                    <h2 className="text-3xl font-bold">Sign In to Trackly</h2>
+                    <h2 className="text-3xl font-bold flex flex-col items-center">
+                      <div className="items-center">
+                        <img src="/icon.png" className="h-20" />
+                      </div>
+                      Sign In to Trackly
+                    </h2>
                     {/* if error show banner */}
                     {errorMessage && (
                       <AlertBanner
@@ -276,7 +281,12 @@ const Login = () => {
                   {" "}
                   <div className="flex flex-col p-5 items-center justify-center space-y-6 text-center text-dark-purple">
                     {" "}
-                    <h2 className="text-3xl font-bold">Create an Account</h2>
+                    <h2 className="text-3xl font-bold flex flex-col items-center">
+                      <div className="items-center">
+                        <img src="/icon.png" className="h-20" />
+                      </div>
+                      Create an Account
+                    </h2>
                     {/* if error show banner */}
                     {errorMessage && (
                       <AlertBanner

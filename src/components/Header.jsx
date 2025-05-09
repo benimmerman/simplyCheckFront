@@ -53,6 +53,7 @@ const Header = () => {
               className="cursor-pointer lg:ml-20 flex items-center"
               onClick={() => navigate("/home")}
             >
+              <img src="/icon.png" className="h-8 filter invert" />
               Trackly
             </div>
             <div className="cursor-pointer" onClick={() => navigate("/home")}>
