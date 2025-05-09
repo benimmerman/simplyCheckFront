@@ -35,13 +35,13 @@ const Login = () => {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   // touched for error
-
-  const [touched, setTouched] = useState({
+  const initialTouchedState = {
     email: false,
     username: false,
     password: false,
     confirmPass: false,
-  });
+  };
+  const [touched, setTouched] = useState(initialTouchedState);
   // handle errors to display for user
   const [errorMessage, setErrorMessage] = useState("");
   // update local data from user input into sign in and register forms
@@ -124,9 +124,11 @@ const Login = () => {
                       journey with us
                     </p>
                     <button
-                      onClick={() =>
-                        setUserInfoLocal({ ...userInfoLocal, page: "signIn" })
-                      }
+                      onClick={() => {
+                        // reset touched
+                        setTouched(initialTouchedState);
+                        setUserInfoLocal({ ...userInfoLocal, page: "signIn" });
+                      }}
                       className="cursor-pointer w-40 uppercase px-6 py-2 rounded-3xl border border-white text-white  transition duration-300"
                     >
                       Sign in
@@ -273,9 +275,12 @@ const Login = () => {
                       Trackly
                     </p>
                     <button
-                      onClick={() =>
-                        setUserInfoLocal({ ...userInfoLocal, page: "signUp" })
-                      }
+                      onClick={() => {
+                        // reset touched
+                        setTouched(initialTouchedState);
+                        // update page
+                        setUserInfoLocal({ ...userInfoLocal, page: "signUp" });
+                      }}
                       className="cursor-pointer w-40 uppercase px-6 py-2 rounded-3xl border border-white text-white  transition duration-300"
                     >
                       Sign Up
