@@ -117,14 +117,12 @@ const Login = () => {
                       className="cursor-pointer w-40 uppercase px-6 py-2 rounded-3xl border border-white text-white  transition duration-300"
                     >
                       Sign in
-                    </button>{" "}
+                    </button>
                   </div>
                 </>
               ) : (
                 <>
-                  {" "}
                   <div className="flex flex-col p-5 items-center justify-center space-y-6 text-center text-dark-purple">
-                    {" "}
                     <h2 className="text-3xl font-bold">Sign In to Trackly</h2>
                     {/* if error show banner */}
                     {errorMessage && (
@@ -240,87 +238,92 @@ const Login = () => {
                         setErrorMessage={setErrorMessage}
                       />
                     )}
-                    <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
-                      <EnvelopeIcon className="text-gray-400 w-5 h-5" />
-                      <input
-                        onChange={(e) => updateForm(e, "email")}
-                        value={userInfoLocal.email}
-                        type="email"
-                        id="email"
-                        placeholder="Email"
-                        className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
-                      />
-                    </div>
-                    <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
-                      <UserIcon className="text-gray-400 w-5 h-5" />
-                      <input
-                        onChange={(e) => updateForm(e, "username")}
-                        value={userInfoLocal.username}
-                        type="text"
-                        id="username"
-                        placeholder="Username"
-                        className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
-                      />
-                    </div>
-                    <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
-                      <LockClosedIcon className="text-gray-400 w-5 h-5" />
-                      <input
-                        type="password"
-                        value={userInfoLocal.password}
-                        onChange={(e) => {
-                          updateForm(e, "password");
-                        }}
-                        id="password"
-                        placeholder="Password"
-                        className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
-                      />
-                    </div>
-                    <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
-                      <LockClosedIcon className="text-gray-400 w-5 h-5" />
-                      <input
-                        type="password"
-                        value={userInfoLocal.confirmPass}
-                        onChange={(e) => {
-                          updateForm(e, "confirmPass");
-                        }}
-                        id="confirmPass"
-                        placeholder="Confirm Password"
-                        className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
-                      />
-                    </div>
-                    <div>
-                      {showSpinner ? (
-                        <Spinner />
-                      ) : (
-                        <button
-                          className={`mt-2 w-40 uppercase px-6 py-2 rounded-3xl border transition duration-300 ${
-                            userInfoLocal.username === "" ||
-                            userInfoLocal.password === "" ||
-                            userInfoLocal.confirmPass === "" ||
-                            userInfoLocal.email === ""
-                              ? "bg-dark-purple/50 border-white text-white cursor-not-allowed"
-                              : "bg-dark-purple border-white text-white hover:bg-dark-purple/90 cursor-pointer"
-                          }`}
-                          disabled={
-                            userInfoLocal.username === "" ||
-                            userInfoLocal.password === "" ||
-                            userInfoLocal.confirmPass === "" ||
-                            userInfoLocal.email === ""
-                          }
-                          title={
-                            userInfoLocal.username === "" ||
-                            userInfoLocal.password === "" ||
-                            userInfoLocal.confirmPass === "" ||
-                            userInfoLocal.email === ""
-                              ? "Fill out form"
-                              : ""
-                          }
-                        >
-                          {" "}
-                          Sign up
-                        </button>
-                      )}
-                    </div>
+                    <form
+                      onSubmit={(e) => handleFormSubmit(e, "register/")}
+                      className="flex flex-col space-y-6 items-center w-full"
+                    >
+                      <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
+                        <EnvelopeIcon className="text-gray-400 w-5 h-5" />
+                        <input
+                          onChange={(e) => updateForm(e, "email")}
+                          value={userInfoLocal.email}
+                          type="email"
+                          id="email"
+                          placeholder="Email"
+                          className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
+                        />
+                      </div>
+                      <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
+                        <UserIcon className="text-gray-400 w-5 h-5" />
+                        <input
+                          onChange={(e) => updateForm(e, "username")}
+                          value={userInfoLocal.username}
+                          type="text"
+                          id="username"
+                          placeholder="Username"
+                          className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
+                        />
+                      </div>
+                      <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
+                        <LockClosedIcon className="text-gray-400 w-5 h-5" />
+                        <input
+                          type="password"
+                          value={userInfoLocal.password}
+                          onChange={(e) => {
+                            updateForm(e, "password");
+                          }}
+                          id="password"
+                          placeholder="Password"
+                          className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
+                        />
+                      </div>
+                      <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
+                        <LockClosedIcon className="text-gray-400 w-5 h-5" />
+                        <input
+                          type="password"
+                          value={userInfoLocal.confirmPass}
+                          onChange={(e) => {
+                            updateForm(e, "confirmPass");
+                          }}
+                          id="confirmPass"
+                          placeholder="Confirm Password"
+                          className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
+                        />
+                      </div>
+                      <div>
+                        {showSpinner ? (
+                          <Spinner />
+                        ) : (
+                          <button
+                            className={`mt-2 w-40 uppercase px-6 py-2 rounded-3xl border transition duration-300 ${
+                              userInfoLocal.username === "" ||
+                              userInfoLocal.password === "" ||
+                              userInfoLocal.confirmPass === "" ||
+                              userInfoLocal.email === ""
+                                ? "bg-dark-purple/50 border-white text-white cursor-not-allowed"
+                                : "bg-dark-purple border-white text-white hover:bg-dark-purple/90 cursor-pointer"
+                            }`}
+                            onClick={(e) => handleFormSubmit(e, "register/")}
+                            disabled={
+                              userInfoLocal.username === "" ||
+                              userInfoLocal.password === "" ||
+                              userInfoLocal.confirmPass === "" ||
+                              userInfoLocal.email === ""
+                            }
+                            title={
+                              userInfoLocal.username === "" ||
+                              userInfoLocal.password === "" ||
+                              userInfoLocal.confirmPass === "" ||
+                              userInfoLocal.email === ""
+                                ? "Fill out form"
+                                : ""
+                            }
+                          >
+                            Sign up
+                          </button>
+                        )}
+                      </div>
+                    </form>
                   </div>
                 </>
               )}
