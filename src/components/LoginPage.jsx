@@ -170,17 +170,9 @@ const Login = () => {
                         className={`text-red-500 text-xs flex items-center mt-1 w-full px-4 ${
                           touched.username &&
                           userInfoLocal.username.length === 0
-                            ? "visible"
-                            : "invisible"
+                            ? "visible h-[1.25rem]"
+                            : "invisible h-0"
                         }`}
-                        style={{
-                          height:
-                            touched.username &&
-                            userInfoLocal.username.length === 0
-                              ? "1.25rem"
-                              : "0",
-                          lineHeight: "1.25rem",
-                        }}
                       >
                         <ExclamationCircleIcon className="w-4 h-4 mr-1" />
                         Cannot be blank.
@@ -206,17 +198,9 @@ const Login = () => {
                         className={`text-red-500 text-xs flex items-center mt-1 w-full px-4 ${
                           touched.password &&
                           userInfoLocal.password.length === 0
-                            ? "visible"
-                            : "invisible"
+                            ? "visible h-[1.25rem]"
+                            : "invisible h-0"
                         }`}
-                        style={{
-                          height:
-                            touched.password &&
-                            userInfoLocal.password.length === 0
-                              ? "1.25rem"
-                              : "0",
-                          lineHeight: "1.25rem",
-                        }}
                       >
                         <ExclamationCircleIcon className="w-4 h-4 mr-1" />
                         Cannot be blank.
@@ -322,17 +306,9 @@ const Login = () => {
                       <p
                         className={`text-red-500 text-xs flex items-center mt-1 w-full px-4 ${
                           touched.email && !emailRegex.test(userInfoLocal.email)
-                            ? "visible"
-                            : "invisible"
+                            ? "visible h-[1.25rem]"
+                            : "invisible h-0"
                         }`}
-                        style={{
-                          height:
-                            touched.email &&
-                            !emailRegex.test(userInfoLocal.email)
-                              ? "1.25rem"
-                              : "0",
-                          lineHeight: "1.25rem",
-                        }}
                       >
                         <ExclamationCircleIcon className="w-4 h-4 mr-1" />
                         Please provide a valid email address.
@@ -358,18 +334,9 @@ const Login = () => {
                           touched.username &&
                           (userInfoLocal.username.length < 3 ||
                             userInfoLocal.username.length > 30)
-                            ? "visible"
-                            : "invisible"
+                            ? "visible h-[1.25rem]"
+                            : "invisible h-0"
                         }`}
-                        style={{
-                          height:
-                            touched.username &&
-                            (userInfoLocal.username.length < 3 ||
-                              userInfoLocal.username.length > 30)
-                              ? "1.25rem"
-                              : "0",
-                          lineHeight: "1.25rem",
-                        }}
                       >
                         <ExclamationCircleIcon className="w-4 h-4 mr-1" />
                         Username must be between 3 and 30 characters.
@@ -393,17 +360,9 @@ const Login = () => {
                       <p
                         className={`text-red-500 text-xs flex items-center mt-1 w-full px-4 ${
                           touched.password && userInfoLocal.password.length < 12
-                            ? "visible"
-                            : "invisible"
+                            ? "visible h-[1.25rem]"
+                            : "invisible h-0"
                         }`}
-                        style={{
-                          height:
-                            touched.password &&
-                            userInfoLocal.password.length < 12
-                              ? "1.25rem"
-                              : "0",
-                          lineHeight: "1.25rem",
-                        }}
                       >
                         <ExclamationCircleIcon className="w-4 h-4 mr-1" />
                         Password must be at least 12 characters.
@@ -428,17 +387,9 @@ const Login = () => {
                         className={`text-red-500 text-xs flex items-center mt-1 w-full px-4 ${
                           touched.confirmPass &&
                           userInfoLocal.password !== userInfoLocal.confirmPass
-                            ? "visible"
-                            : "invisible"
+                            ? "visible h-[1.25rem]"
+                            : "invisible h-0"
                         }`}
-                        style={{
-                          height:
-                            touched.confirmPass &&
-                            userInfoLocal.password !== userInfoLocal.confirmPass
-                              ? "1.25rem"
-                              : "0",
-                          lineHeight: "1.25rem",
-                        }}
                       >
                         <ExclamationCircleIcon className="w-4 h-4 mr-1" />
                         Password does not match.
@@ -450,7 +401,7 @@ const Login = () => {
                           <Spinner />
                         ) : (
                           <button
-                            className={`mt-2 w-40 uppercase px-6 py-2 rounded-3xl border transition duration-300 ${
+                            className={`mt-2 w-40 uppercase px-6 py-2 rounded-3xl border text-white transition duration-300 ${
                               // Button is disabled if there's an error in any of the fields
                               userInfoLocal.username === "" ||
                               userInfoLocal.password === "" ||
@@ -466,8 +417,8 @@ const Login = () => {
                               (touched.confirmPass &&
                                 userInfoLocal.password !==
                                   userInfoLocal.confirmPass)
-                                ? "bg-dark-purple/50 border-white text-white cursor-not-allowed"
-                                : "bg-dark-purple border-white text-white hover:bg-dark-purple/90 cursor-pointer"
+                                ? "bg-dark-purple/50  cursor-not-allowed"
+                                : "bg-dark-purple hover:bg-dark-purple/90 cursor-pointer"
                             }`}
                             onClick={(e) => handleFormSubmit(e, "register/")}
                             disabled={
