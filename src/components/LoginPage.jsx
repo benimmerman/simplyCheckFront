@@ -8,6 +8,7 @@ import {
   UserIcon,
   LockClosedIcon,
   EnvelopeIcon,
+  ExclamationCircleIcon,
 } from "@heroicons/react/24/solid";
 import { Spinner } from "./helpers/Spinner";
 import { AlertBanner } from "./helpers/Alerts";
@@ -28,6 +29,18 @@ const Login = () => {
     password: "",
     confirmPass: "",
     username: "",
+  });
+
+  // Email validation regex
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  // touched for error
+
+  const [touched, setTouched] = useState({
+    email: false,
+    username: false,
+    password: false,
+    confirmPass: false,
   });
   // handle errors to display for user
   const [errorMessage, setErrorMessage] = useState("");
@@ -135,9 +148,9 @@ const Login = () => {
                     )}
                     <form
                       onSubmit={(e) => handleFormSubmit(e, "api/token/")}
-                      className="flex flex-col space-y-6 items-center w-full"
+                      className="flex flex-col space-y-2 items-center w-full"
                     >
-                      <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
+                      <div className="flex w-full mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
                         <UserIcon className="text-gray-400 w-5 h-5" />
                         <input
                           onChange={(e) => updateForm(e, "username")}
@@ -145,10 +158,33 @@ const Login = () => {
                           value={userInfoLocal.username}
                           id="username"
                           placeholder="Username"
+                          onBlur={() =>
+                            setTouched({ ...touched, username: true })
+                          }
                           className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
                         />
                       </div>
-                      <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
+                      <p
+                        className={`text-red-500 text-xs flex items-center mt-1 w-full px-4 ${
+                          touched.username &&
+                          userInfoLocal.username.length === 0
+                            ? "visible"
+                            : "invisible"
+                        }`}
+                        style={{
+                          height:
+                            touched.username &&
+                            userInfoLocal.username.length === 0
+                              ? "1.25rem"
+                              : "0",
+                          lineHeight: "1.25rem",
+                        }}
+                      >
+                        <ExclamationCircleIcon className="w-4 h-4 mr-1" />
+                        Cannot be blank.
+                      </p>
+
+                      <div className="flex w-full mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
                         <LockClosedIcon className="text-gray-400 w-5 h-5" />
                         <input
                           type="password"
@@ -156,11 +192,34 @@ const Login = () => {
                           onChange={(e) => {
                             updateForm(e, "password");
                           }}
+                          onBlur={() =>
+                            setTouched({ ...touched, password: true })
+                          }
                           id="password"
                           placeholder="Password"
                           className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
                         />
                       </div>
+                      <p
+                        className={`text-red-500 text-xs flex items-center mt-1 w-full px-4 ${
+                          touched.password &&
+                          userInfoLocal.password.length === 0
+                            ? "visible"
+                            : "invisible"
+                        }`}
+                        style={{
+                          height:
+                            touched.password &&
+                            userInfoLocal.password.length === 0
+                              ? "1.25rem"
+                              : "0",
+                          lineHeight: "1.25rem",
+                        }}
+                      >
+                        <ExclamationCircleIcon className="w-4 h-4 mr-1" />
+                        Cannot be blank.
+                      </p>
+
                       <div>
                         {showSpinner ? (
                           <Spinner />
@@ -205,7 +264,7 @@ const Login = () => {
             >
               {userInfoLocal.page === "signIn" ? (
                 <>
-                  <div className="z-50flex flex-col p-5 text-white items-center justify-center text-center">
+                  <div className="z-50 flex flex-col p-5 text-white items-center justify-center text-center">
                     <h2 className="text-3xl font-bold mb-4">
                       Welcome to Trackly
                     </h2>
@@ -240,9 +299,10 @@ const Login = () => {
                     )}
                     <form
                       onSubmit={(e) => handleFormSubmit(e, "register/")}
-                      className="flex flex-col space-y-6 items-center w-full"
+                      className="flex flex-col space-y-2 items-center w-full"
                     >
-                      <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
+                      {/* Email */}
+                      <div className="flex w-full mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
                         <EnvelopeIcon className="text-gray-400 w-5 h-5" />
                         <input
                           onChange={(e) => updateForm(e, "email")}
@@ -251,9 +311,30 @@ const Login = () => {
                           id="email"
                           placeholder="Email"
                           className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
+                          onBlur={() => setTouched({ ...touched, email: true })}
                         />
                       </div>
-                      <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
+                      <p
+                        className={`text-red-500 text-xs flex items-center mt-1 w-full px-4 ${
+                          touched.email && !emailRegex.test(userInfoLocal.email)
+                            ? "visible"
+                            : "invisible"
+                        }`}
+                        style={{
+                          height:
+                            touched.email &&
+                            !emailRegex.test(userInfoLocal.email)
+                              ? "1.25rem"
+                              : "0",
+                          lineHeight: "1.25rem",
+                        }}
+                      >
+                        <ExclamationCircleIcon className="w-4 h-4 mr-1" />
+                        Please provide a valid email address.
+                      </p>
+
+                      {/* Username */}
+                      <div className="flex w-full mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
                         <UserIcon className="text-gray-400 w-5 h-5" />
                         <input
                           onChange={(e) => updateForm(e, "username")}
@@ -261,45 +342,125 @@ const Login = () => {
                           type="text"
                           id="username"
                           placeholder="Username"
-                          className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
+                          onBlur={() =>
+                            setTouched({ ...touched, username: true })
+                          }
+                          className="peer flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
                         />
                       </div>
-                      <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
+                      <p
+                        className={`text-red-500 text-xs flex items-center mt-1 w-full px-4 ${
+                          touched.username &&
+                          (userInfoLocal.username.length < 3 ||
+                            userInfoLocal.username.length > 30)
+                            ? "visible"
+                            : "invisible"
+                        }`}
+                        style={{
+                          height:
+                            touched.username &&
+                            (userInfoLocal.username.length < 3 ||
+                              userInfoLocal.username.length > 30)
+                              ? "1.25rem"
+                              : "0",
+                          lineHeight: "1.25rem",
+                        }}
+                      >
+                        <ExclamationCircleIcon className="w-4 h-4 mr-1" />
+                        Username must be between 3 and 30 characters.
+                      </p>
+
+                      {/* Password */}
+                      <div className="flex w-full mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
                         <LockClosedIcon className="text-gray-400 w-5 h-5" />
                         <input
                           type="password"
                           value={userInfoLocal.password}
-                          onChange={(e) => {
-                            updateForm(e, "password");
-                          }}
+                          onChange={(e) => updateForm(e, "password")}
                           id="password"
                           placeholder="Password"
+                          onBlur={() =>
+                            setTouched({ ...touched, password: true })
+                          }
                           className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
                         />
                       </div>
-                      <div className="flex mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
+                      <p
+                        className={`text-red-500 text-xs flex items-center mt-1 w-full px-4 ${
+                          touched.password && userInfoLocal.password.length < 12
+                            ? "visible"
+                            : "invisible"
+                        }`}
+                        style={{
+                          height:
+                            touched.password &&
+                            userInfoLocal.password.length < 12
+                              ? "1.25rem"
+                              : "0",
+                          lineHeight: "1.25rem",
+                        }}
+                      >
+                        <ExclamationCircleIcon className="w-4 h-4 mr-1" />
+                        Password must be at least 12 characters.
+                      </p>
+
+                      {/* Confirm Password */}
+                      <div className="flex w-full mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
                         <LockClosedIcon className="text-gray-400 w-5 h-5" />
                         <input
                           type="password"
                           value={userInfoLocal.confirmPass}
-                          onChange={(e) => {
-                            updateForm(e, "confirmPass");
-                          }}
+                          onChange={(e) => updateForm(e, "confirmPass")}
                           id="confirmPass"
                           placeholder="Confirm Password"
+                          onBlur={() =>
+                            setTouched({ ...touched, confirmPass: true })
+                          }
                           className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
                         />
                       </div>
+                      <p
+                        className={`text-red-500 text-xs flex items-center mt-1 w-full px-4 ${
+                          touched.confirmPass &&
+                          userInfoLocal.password !== userInfoLocal.confirmPass
+                            ? "visible"
+                            : "invisible"
+                        }`}
+                        style={{
+                          height:
+                            touched.confirmPass &&
+                            userInfoLocal.password !== userInfoLocal.confirmPass
+                              ? "1.25rem"
+                              : "0",
+                          lineHeight: "1.25rem",
+                        }}
+                      >
+                        <ExclamationCircleIcon className="w-4 h-4 mr-1" />
+                        Password does not match.
+                      </p>
+
+                      {/* Submit Button */}
                       <div>
                         {showSpinner ? (
                           <Spinner />
                         ) : (
                           <button
                             className={`mt-2 w-40 uppercase px-6 py-2 rounded-3xl border transition duration-300 ${
+                              // Button is disabled if there's an error in any of the fields
                               userInfoLocal.username === "" ||
                               userInfoLocal.password === "" ||
                               userInfoLocal.confirmPass === "" ||
-                              userInfoLocal.email === ""
+                              userInfoLocal.email === "" ||
+                              (touched.email &&
+                                !emailRegex.test(userInfoLocal.email)) ||
+                              (touched.username &&
+                                (userInfoLocal.username.length < 3 ||
+                                  userInfoLocal.username.length > 30)) ||
+                              (touched.password &&
+                                userInfoLocal.password.length < 12) ||
+                              (touched.confirmPass &&
+                                userInfoLocal.password !==
+                                  userInfoLocal.confirmPass)
                                 ? "bg-dark-purple/50 border-white text-white cursor-not-allowed"
                                 : "bg-dark-purple border-white text-white hover:bg-dark-purple/90 cursor-pointer"
                             }`}
@@ -308,14 +469,34 @@ const Login = () => {
                               userInfoLocal.username === "" ||
                               userInfoLocal.password === "" ||
                               userInfoLocal.confirmPass === "" ||
-                              userInfoLocal.email === ""
+                              userInfoLocal.email === "" ||
+                              (touched.email &&
+                                !emailRegex.test(userInfoLocal.email)) ||
+                              (touched.username &&
+                                (userInfoLocal.username.length < 3 ||
+                                  userInfoLocal.username.length > 30)) ||
+                              (touched.password &&
+                                userInfoLocal.password.length < 12) ||
+                              (touched.confirmPass &&
+                                userInfoLocal.password !==
+                                  userInfoLocal.confirmPass)
                             }
                             title={
                               userInfoLocal.username === "" ||
                               userInfoLocal.password === "" ||
                               userInfoLocal.confirmPass === "" ||
-                              userInfoLocal.email === ""
-                                ? "Fill out form"
+                              userInfoLocal.email === "" ||
+                              (touched.email &&
+                                !emailRegex.test(userInfoLocal.email)) ||
+                              (touched.username &&
+                                (userInfoLocal.username.length < 3 ||
+                                  userInfoLocal.username.length > 30)) ||
+                              (touched.password &&
+                                userInfoLocal.password.length < 12) ||
+                              (touched.confirmPass &&
+                                userInfoLocal.password !==
+                                  userInfoLocal.confirmPass)
+                                ? "Please fix the errors to enable signup"
                                 : ""
                             }
                           >
