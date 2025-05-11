@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import axiosInstance from "../services/axiosInstance";
 import { TrashIcon, ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import { useSelector } from "react-redux";
@@ -6,12 +6,13 @@ import { useSelector } from "react-redux";
 import { AnimatePresence, motion } from "framer-motion";
 
 export const Checklist = () => {
-  const LIST_API_URL = "list/";
+  const LISTITEMS_API_URL = "listItems/";
   const initialTouched = {
     title: false,
     newItem: false,
     existingItem: false,
   };
+  const inputRef = useRef(null);
   const userInfo = useSelector((state) => state.userInfo);
   const listInfo = useSelector((state) => state.listInfo);
   const [listItems, setListItems] = useState([]);
@@ -19,11 +20,12 @@ export const Checklist = () => {
   const [listTitle, setListTitle] = useState(listInfo.listTitle);
   const [touched, setTouched] = useState(initialTouched);
 
+  console.log(["listInfo", listInfo]);
   // when page loads retireve all the items for the list
   useEffect(() => {
     if (listInfo?.listId) {
       axiosInstance
-        .get(`${LIST_API_URL}${userInfo.username}/${listInfo.listId}/`)
+        .get(`${LISTITEMS_API_URL}${userInfo.username}/${listInfo.listId}/`)
         .then((res) => {
           const items = res.data.listItems.map((item) => ({
             itemName: item.itemName,
@@ -50,6 +52,13 @@ export const Checklist = () => {
     }
   }, [listInfo.listId, userInfo.username]);
 
+  useEffect(() => {
+    // Focus the input field when the component mounts and when listInfo.fromNewList is true
+    if (listInfo.fromNewList && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [listInfo.fromNewList]); // Trigger the effect when listInfo.fromNewList changes
+
   // save whole input as inputValue
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -57,10 +66,11 @@ export const Checklist = () => {
 
   // adds inputValue to listItems when user presses enter key and inputValue has valid characters
   const handleNewItem = (e) => {
-    const checkValid = inputValue.trim().length > 0 && inputValue.trim().length <=1000;
+    const checkValid =
+      inputValue.trim().length > 0 && inputValue.trim().length <= 1000;
     if (e.key === "Enter" && checkValid) {
       axiosInstance
-        .post(LIST_API_URL, {
+        .post(LISTITEMS_API_URL, {
           itemName: inputValue,
           listId: listInfo.listId,
           username: userInfo.username,
@@ -97,7 +107,7 @@ export const Checklist = () => {
   // deletes corresponding listItem when trash icon is clicked
   const handleItemDelete = (listItemId) => {
     axiosInstance
-      .delete(LIST_API_URL, {
+      .delete(LISTITEMS_API_URL, {
         params: { id: listItemId },
       })
       .then((res) => {
@@ -127,21 +137,20 @@ export const Checklist = () => {
       item.itemName.trim().length > 0 && item.itemName.trim().length <= 1000;
     if (itemCheckValid) {
       axiosInstance
-        .put(LIST_API_URL, {
+        .put(LISTITEMS_API_URL, {
           updateType: "item",
           username: userInfo.username,
           id: listItemId,
           ...updatedFields,
         })
         .then((res) => {
-          console.log(['handle save itm res:',res]);
+          console.log(["handle save itm res:", res]);
           setTouched({ ...touched, existingItem: false });
         })
         .catch((err) => {
           console.error("Error updating item:", err);
         });
     }
-      
   };
 
   const handleTitleEdit = (e) => {
@@ -150,7 +159,7 @@ export const Checklist = () => {
 
   const handleSaveTitle = () => {
     axiosInstance
-      .put(LIST_API_URL, {
+      .put(LISTITEMS_API_URL, {
         updateType: "title",
         username: userInfo.username,
         newListTitle: listTitle,
@@ -183,7 +192,9 @@ export const Checklist = () => {
   };
 
   const handleTitleBlur = () => {
-    handleSaveTitle();
+    if (listTitle.length > 0) {
+      handleSaveTitle();
+    }
   };
 
   const handleToggleCheckbox = (itemId) => {
@@ -192,7 +203,7 @@ export const Checklist = () => {
     const updatedIsDone = !currentItem.isDone;
     console.log(updatedIsDone);
     axiosInstance
-      .put(LIST_API_URL, {
+      .put(LISTITEMS_API_URL, {
         updateType: "toggleCheck",
         username: userInfo.username,
         id: itemId,
@@ -252,24 +263,51 @@ export const Checklist = () => {
   };
 
   const sortListItems = [...listItems].sort((a, b) => {
+    ``;
     // Unchecked (false) comes before checked (true)
     if (a.isDone !== b.isDone) return a.isDone ? 1 : -1;
     return b.createdWhen.localeCompare(a.createdWhen); // newest first
   });
-  console.log(["sortListItems", sortListItems]);
 
   return (
     <div className="max-w-7xl mx-auto  bg-opacity-40 backdrop-filter  mt-4 p-6 space-y-3">
-      <div className="items-start justify-start text-uranian-blue text-center flex">
-        <input
-          value={listTitle}
-          className="bg-transparent outline-none text-3xl font-semibold "
-          type="text"
-          onChange={(e) => handleTitleEdit(e)}
-          onKeyDown={(e) => handleTitleKeyDown(e)}
-          onBlur={handleTitleBlur}
-        />
-      </div>
+      {listInfo.fromNewList ? (
+        <div className="items-start justify-start text-uranian-blue text-center flex">
+          <input
+            ref={inputRef}
+            placeholder="Give your list a name"
+            value={listTitle}
+            className="bg-transparent outline-none text-3xl font-semibold "
+            type="text"
+            onChange={(e) => handleTitleEdit(e)}
+            onKeyDown={(e) => handleTitleKeyDown(e)}
+            onFocus={() => setTouched({ ...touched, title: true })}
+            onBlur={handleTitleBlur}
+          />
+          <p
+            className={`text-red-500 text-xs flex items-center mt-1 w-full px-4 ${
+              touched.title && listTitle.length > 0
+                ? "visible h-[1.25rem]"
+                : "invisible h-0"
+            }`}
+          >
+            <ExclamationCircleIcon className="w-4 h-4 mr-1" />
+            List must be given a name.
+          </p>
+        </div>
+      ) : (
+        <div className="items-start justify-start text-uranian-blue text-center flex">
+          <input
+            value={listTitle}
+            className="bg-transparent outline-none text-3xl font-semibold "
+            type="text"
+            onChange={(e) => handleTitleEdit(e)}
+            onKeyDown={(e) => handleTitleKeyDown(e)}
+            onFocus={() => setTouched({ ...touched, title: true })}
+            onBlur={handleTitleBlur}
+          />
+        </div>
+      )}
       {/* new item input box - click to type, enter to submit to create a row */}
       <textarea
         value={inputValue}

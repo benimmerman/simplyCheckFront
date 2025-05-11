@@ -11,8 +11,8 @@ import { Spinner } from "./helpers/Spinner";
 
 const HomePage = () => {
   const HOME_API_URL = "home/";
-  const NEW_LIST_API_URL = "newList/";
-  const DELETE_LIST_API_URL = "deleteList/";
+  const NEW_LIST_API_URL = "list/";
+  const DELETE_LIST_API_URL = "list/";
   // create navigate to use for nav
   const navigate = useNavigate();
   // create dispatch to save values globally
@@ -30,6 +30,9 @@ const HomePage = () => {
   // reusable style for button
   const modalButtonStyle =
     "flex w-auto justify-center items-center  rounded-md px-3 py-1.5 text-sm font-semibold shadow-sm transition duration-300 p-4";
+
+  console.log("this is a test from the home page");
+
   // checks if there is a valid username in global state, if not get sent back to home page
   useEffect(() => {
     if (!userInfo.username) {
@@ -118,7 +121,7 @@ const HomePage = () => {
   };
 
   const handleConfirmDelete = (item, index) => {
-    setDeleteTitle(item.listTitle)
+    setDeleteTitle(item.listTitle);
     setDeleteIndex(index);
     setshowModal(true);
   };
