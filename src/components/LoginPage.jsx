@@ -100,19 +100,82 @@ const Login = () => {
       });
   };
 
+  const createAccount = [
+    {
+      input: "email",
+      placeholder: "Email (optional)",
+      icon: <EnvelopeIcon className="text-gray-400 w-5 h-5" />,
+      error: <></>,
+    },
+    {
+      input: "username",
+      placeholder: "Username",
+      icon: <UserIcon className="text-gray-400 w-5 h-5" />,
+      error: (
+        <p
+          className={`text-red-500 text-xs flex items-center w-full ${
+            touched.username &&
+            (userInfoLocal.username.length < 3 ||
+              userInfoLocal.username.length > 30)
+              ? "visible h-[1.25rem]"
+              : "invisible h-0"
+          }`}
+        >
+          <ExclamationCircleIcon className="w-4 h-4 mr-1" />
+          Must be between 3 and 30 characters.
+        </p>
+      ),
+    },
+    {
+      input: "password",
+      placeholder: "Password",
+      icon: <LockClosedIcon className="text-gray-400 w-5 h-5" />,
+      error: (
+        <p
+          className={`text-red-500 text-xs flex items-center w-full ${
+            touched.password && userInfoLocal.password.length < 12
+              ? "visible h-[1.25rem]"
+              : "invisible h-0"
+          }`}
+        >
+          <ExclamationCircleIcon className="w-4 h-4 mr-1" />
+          Password must be at least 12 characters.
+        </p>
+      ),
+    },
+    {
+      input: "confirmPass",
+      placeholder: "Confirm Password",
+      icon: <LockClosedIcon className="text-gray-400 w-5 h-5" />,
+      error: (
+        <p
+          className={`text-red-500 text-xs flex items-center w-full ${
+            touched.confirmPass &&
+            userInfoLocal.password !== userInfoLocal.confirmPass
+              ? "visible h-[1.25rem]"
+              : "invisible h-0"
+          }`}
+        >
+          <ExclamationCircleIcon className="w-4 h-4 mr-1" />
+          Password does not match.
+        </p>
+      ),
+    },
+  ];
+
   console.log(errorMessage);
   return (
     <>
       <div className="flex h-screen w-screen bg-page/30 items-center justify-center ">
         <div className="relative w-full h-full md:max-w-7xl md:h-[600px] md:rounded-2xl overflow-hidden shadow-xl">
           {/* Sliding Background Panel */}
-          <div className="absolute inset-0 flex flex-col md:flex-row">
+          <div className="absolute inset-0 overflow-y-auto flex flex-col md:flex-row bg-white">
             {/* Sign In Panel */}
             <div
               className={`md:w-1/2 h-1/2 md:h-full p-10 flex flex-col justify-center items-center transition-all duration-500 ease-in-out z-10 ${
                 userInfoLocal.page !== "signIn"
                   ? "bg-gradient-to-br from-gray-200 to-purple-500 text-white"
-                  : "opacity-100 bg-white text-dark-purple"
+                  : "opacity-100 text-dark-purple"
               }`}
             >
               {userInfoLocal.page !== "signIn" ? (
@@ -157,7 +220,7 @@ const Login = () => {
                       onSubmit={(e) => handleFormSubmit(e, "api/token/")}
                       className="flex flex-col space-y-2 items-center w-full"
                     >
-                      <div className="flex w-full mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
+                      <div className="flex w-full mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
                         <UserIcon className="text-gray-400 w-5 h-5" />
                         <input
                           onChange={(e) => updateForm(e, "username")}
@@ -172,7 +235,7 @@ const Login = () => {
                         />
                       </div>
                       <p
-                        className={`text-red-500 text-xs flex items-center mt-1 w-full px-4 ${
+                        className={`text-red-500 text-xs flex items-center mt-1 w-full ${
                           touched.username &&
                           userInfoLocal.username.length === 0
                             ? "visible h-[1.25rem]"
@@ -183,7 +246,7 @@ const Login = () => {
                         Cannot be blank.
                       </p>
 
-                      <div className="flex w-full mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
+                      <div className="flex w-full mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
                         <LockClosedIcon className="text-gray-400 w-5 h-5" />
                         <input
                           type="password"
@@ -247,10 +310,10 @@ const Login = () => {
             {/* Sign Up Panel */}
 
             <div
-              className={`md:w-1/2 h-1/2 md:h-full p-10 flex flex-col justify-center items-center transition-all duration-500 ease-in-out z-10 ${
+              className={`md:w-1/2 min-h-1/2  md:h-full p-10 flex flex-col justify-center items-center transition-all duration-500 ease-in-out z-10 ${
                 userInfoLocal.page === "signIn"
                   ? "bg-gradient-to-br from-gray-200 to-purple-500 text-white"
-                  : "opacity-100 bg-white text-dark-purple"
+                  : "opacity-100 text-dark-purple"
               }`}
             >
               {userInfoLocal.page === "signIn" ? (
@@ -273,17 +336,15 @@ const Login = () => {
                       className="cursor-pointer w-40 uppercase px-6 py-2 rounded-3xl border border-white text-white  transition duration-300"
                     >
                       Sign Up
-                    </button>{" "}
+                    </button>
                   </div>
                 </>
               ) : (
                 <>
-                  {" "}
                   <div className="flex flex-col p-5 items-center justify-center space-y-6 text-center text-dark-purple">
-                    {" "}
-                    <h2 className="text-3xl font-bold flex flex-col items-center">
+                    <h2 className="text-2xl font-bold flex flex-col items-center">
                       <div className="items-center">
-                        <img src="/icon.png" className="h-20" />
+                        <img src="/icon.png" className="h-16" />
                       </div>
                       Create an Account
                     </h2>
@@ -298,112 +359,27 @@ const Login = () => {
                     )}
                     <form
                       onSubmit={(e) => handleFormSubmit(e, "register/")}
-                      className="flex flex-col space-y-2 items-center w-full"
+                      className="flex flex-col items-center w-full"
                     >
-                      {/* Email */}
-                      <div className="flex w-full mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
-                        <EnvelopeIcon className="text-gray-400 w-5 h-5" />
-                        <input
-                          onChange={(e) => updateForm(e, "email")}
-                          value={userInfoLocal.email}
-                          type="email"
-                          id="email"
-                          placeholder="Email (optional)"
-                          className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
-                          onBlur={() => setTouched({ ...touched, email: true })}
-                        />
-                      </div>
-                      {/* <p
-                        className={`text-red-500 text-xs flex items-center mt-1 w-full px-4 ${
-                          touched.email && !emailRegex.test(userInfoLocal.email)
-                            ? "visible h-[1.25rem]"
-                            : "invisible h-0"
-                        }`}
-                      >
-                        <ExclamationCircleIcon className="w-4 h-4 mr-1" />
-                        Please provide a valid email address.
-                      </p> */}
-
-                      {/* Username */}
-                      <div className="flex w-full mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
-                        <UserIcon className="text-gray-400 w-5 h-5" />
-                        <input
-                          onChange={(e) => updateForm(e, "username")}
-                          value={userInfoLocal.username}
-                          type="text"
-                          id="username"
-                          placeholder="Username"
-                          onBlur={() =>
-                            setTouched({ ...touched, username: true })
-                          }
-                          className="peer flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
-                        />
-                      </div>
-                      <p
-                        className={`text-red-500 text-xs flex items-center mt-1 w-full px-4 ${
-                          touched.username &&
-                          (userInfoLocal.username.length < 3 ||
-                            userInfoLocal.username.length > 30)
-                            ? "visible h-[1.25rem]"
-                            : "invisible h-0"
-                        }`}
-                      >
-                        <ExclamationCircleIcon className="w-4 h-4 mr-1" />
-                        Username must be between 3 and 30 characters.
-                      </p>
-
-                      {/* Password */}
-                      <div className="flex w-full mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
-                        <LockClosedIcon className="text-gray-400 w-5 h-5" />
-                        <input
-                          type="password"
-                          value={userInfoLocal.password}
-                          onChange={(e) => updateForm(e, "password")}
-                          id="password"
-                          placeholder="Password"
-                          onBlur={() =>
-                            setTouched({ ...touched, password: true })
-                          }
-                          className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
-                        />
-                      </div>
-                      <p
-                        className={`text-red-500 text-xs flex items-center mt-1 w-full px-4 ${
-                          touched.password && userInfoLocal.password.length < 12
-                            ? "visible h-[1.25rem]"
-                            : "invisible h-0"
-                        }`}
-                      >
-                        <ExclamationCircleIcon className="w-4 h-4 mr-1" />
-                        Password must be at least 12 characters.
-                      </p>
-
-                      {/* Confirm Password */}
-                      <div className="flex w-full mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
-                        <LockClosedIcon className="text-gray-400 w-5 h-5" />
-                        <input
-                          type="password"
-                          value={userInfoLocal.confirmPass}
-                          onChange={(e) => updateForm(e, "confirmPass")}
-                          id="confirmPass"
-                          placeholder="Confirm Password"
-                          onBlur={() =>
-                            setTouched({ ...touched, confirmPass: true })
-                          }
-                          className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
-                        />
-                      </div>
-                      <p
-                        className={`text-red-500 text-xs flex items-center mt-1 w-full px-4 ${
-                          touched.confirmPass &&
-                          userInfoLocal.password !== userInfoLocal.confirmPass
-                            ? "visible h-[1.25rem]"
-                            : "invisible h-0"
-                        }`}
-                      >
-                        <ExclamationCircleIcon className="w-4 h-4 mr-1" />
-                        Password does not match.
-                      </p>
+                      {createAccount.map((item) => (
+                        <div className="flex flex-col w-full">
+                          <div className="flex w-full mb-4 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 pb-2 shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
+                            {item.icon}
+                            <input
+                              onChange={(e) => updateForm(e, item.input)}
+                              value={userInfoLocal[item.input]}
+                              type={item.input}
+                              id={item.input}
+                              placeholder={item.placeholder}
+                              className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
+                              onBlur={() =>
+                                setTouched({ ...touched, [item.input]: true })
+                              }
+                            />
+                          </div>
+                          <div className="w-full">{item.error}</div>
+                        </div>
+                      ))}
 
                       {/* Submit Button */}
                       <div>
