@@ -52,12 +52,12 @@ export const Checklist = () => {
     }
   }, [listInfo.listId, userInfo.username]);
 
-  useEffect(() => {
-    // Focus the input field when the component mounts and when listInfo.fromNewList is true
-    if (listInfo.fromNewList && inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [listInfo.fromNewList]); // Trigger the effect when listInfo.fromNewList changes
+  // useEffect(() => {
+  //   // Focus the input field when the component mounts and when listInfo.fromNewList is true
+  //   if (listInfo.fromNewList && inputRef.current) {
+  //     inputRef.current.focus();
+  //   }
+  // }, [listInfo.fromNewList]); // Trigger the effect when listInfo.fromNewList changes
 
   // save whole input as inputValue
   const handleInputChange = (e) => {
@@ -192,7 +192,10 @@ export const Checklist = () => {
   };
 
   const handleTitleBlur = () => {
-    if (listTitle.length > 0) {
+    console.log(["listTitle", listTitle]);
+    console.log(["empty", ""]);
+    setTouched({ ...touched, title: false });
+    if (listTitle.trim() !== "") {
       handleSaveTitle();
     }
   };
@@ -286,7 +289,7 @@ export const Checklist = () => {
           />
           <p
             className={`text-red-500 text-xs flex items-center mt-1 w-full px-4 ${
-              touched.title && listTitle.length > 0
+              !touched.title && listTitle === ""
                 ? "visible h-[1.25rem]"
                 : "invisible h-0"
             }`}

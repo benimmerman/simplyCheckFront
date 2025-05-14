@@ -32,7 +32,7 @@ const Login = () => {
   });
 
   // Email validation regex
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  // const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   // touched for error
   const initialTouchedState = {
@@ -308,12 +308,12 @@ const Login = () => {
                           value={userInfoLocal.email}
                           type="email"
                           id="email"
-                          placeholder="Email"
+                          placeholder="Email (optional)"
                           className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
                           onBlur={() => setTouched({ ...touched, email: true })}
                         />
                       </div>
-                      <p
+                      {/* <p
                         className={`text-red-500 text-xs flex items-center mt-1 w-full px-4 ${
                           touched.email && !emailRegex.test(userInfoLocal.email)
                             ? "visible h-[1.25rem]"
@@ -322,7 +322,7 @@ const Login = () => {
                       >
                         <ExclamationCircleIcon className="w-4 h-4 mr-1" />
                         Please provide a valid email address.
-                      </p>
+                      </p> */}
 
                       {/* Username */}
                       <div className="flex w-full mb-2 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
@@ -416,9 +416,9 @@ const Login = () => {
                               userInfoLocal.username === "" ||
                               userInfoLocal.password === "" ||
                               userInfoLocal.confirmPass === "" ||
-                              userInfoLocal.email === "" ||
-                              (touched.email &&
-                                !emailRegex.test(userInfoLocal.email)) ||
+                              // userInfoLocal.email === "" ||
+                              // (touched.email &&
+                              //   !emailRegex.test(userInfoLocal.email)) ||
                               (touched.username &&
                                 (userInfoLocal.username.length < 3 ||
                                   userInfoLocal.username.length > 30)) ||
@@ -435,9 +435,9 @@ const Login = () => {
                               userInfoLocal.username === "" ||
                               userInfoLocal.password === "" ||
                               userInfoLocal.confirmPass === "" ||
-                              userInfoLocal.email === "" ||
-                              (touched.email &&
-                                !emailRegex.test(userInfoLocal.email)) ||
+                              // userInfoLocal.email === "" ||
+                              // (touched.email &&
+                              //   !emailRegex.test(userInfoLocal.email)) ||
                               (touched.username &&
                                 (userInfoLocal.username.length < 3 ||
                                   userInfoLocal.username.length > 30)) ||
@@ -451,9 +451,9 @@ const Login = () => {
                               userInfoLocal.username === "" ||
                               userInfoLocal.password === "" ||
                               userInfoLocal.confirmPass === "" ||
-                              userInfoLocal.email === "" ||
-                              (touched.email &&
-                                !emailRegex.test(userInfoLocal.email)) ||
+                              // userInfoLocal.email === "" ||
+                              // (touched.email &&
+                              //   !emailRegex.test(userInfoLocal.email)) ||
                               (touched.username &&
                                 (userInfoLocal.username.length < 3 ||
                                   userInfoLocal.username.length > 30)) ||

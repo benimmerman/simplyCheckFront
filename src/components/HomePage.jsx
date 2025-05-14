@@ -13,25 +13,22 @@ const HomePage = () => {
   const HOME_API_URL = "home/";
   const NEW_LIST_API_URL = "list/";
   const DELETE_LIST_API_URL = "list/";
-  // create navigate to use for nav
   const navigate = useNavigate();
-  // create dispatch to save values globally
   const dispatch = useDispatch();
-  // create userInfo from global state "state", userSlice named "userInfo"
   const userInfo = useSelector((state) => state.userInfo);
-  // const listInfo = useSelector((state) => state.listInfo);
   const [userLists, setUserLists] = useState({});
   const [showModal, setshowModal] = useState(false);
   const [deleteIndex, setDeleteIndex] = useState(null);
   const [deleteTitle, setDeleteTitle] = useState(null);
+  const [newListTitle, setNewListTitle] = useState("");
+  const [newListTitleTouched, setNewListTitleTouched] = useState(false);
+  const [newListTitleError, setNewListTitleError] = useState(false);
 
   // variable to show spinner
   const [showSpinner, setShowSpinner] = useState(false);
   // reusable style for button
   const modalButtonStyle =
     "flex w-auto justify-center items-center  rounded-md px-3 py-1.5 text-sm font-semibold shadow-sm transition duration-300 p-4";
-
-  console.log("this is a test from the home page");
 
   // checks if there is a valid username in global state, if not get sent back to home page
   useEffect(() => {
@@ -60,6 +57,7 @@ const HomePage = () => {
     axiosInstance
       .post(NEW_LIST_API_URL, {
         username: userInfo.username,
+        listTitle: newListTitle,
       })
       .then((res) => {
         dispatch(
@@ -126,7 +124,16 @@ const HomePage = () => {
     setshowModal(true);
   };
 
-  console.log(userLists);
+  const handleNewListTitle = () => {
+    
+    console.log("newListTitle", newListTitle.trim());
+    if (newListTitle.trim() !== "" && newListTitle !== null) {
+      handleNewList();
+    } else {
+      setNewListTitleError(true);
+    }
+  };
+
   return (
     <div>
       <div className="max-w-7xl min-h-full mx-auto justify-center items-center">
@@ -136,7 +143,7 @@ const HomePage = () => {
             <PencilSquareIcon
               className="w-6 h-6 ml-2 cursor-pointer"
               title="Create New List"
-              onClick={handleNewList}
+              onClick={() => setNewListTitleTouched(true)}
             />
           </div>
           <div className=" text-gray-800 text-lg mt-2">
@@ -191,6 +198,48 @@ const HomePage = () => {
                   onClick={handleDeleteList}
                 >
                   Delete
+                </button>
+              )}
+            </div>
+          </Modal>
+        )}
+
+        {newListTitleTouched && (
+          <Modal
+            isOpen={newListTitleTouched}
+            onClose={() => {
+              setNewListTitleTouched(false);
+              setNewListTitleError(false);
+            }}
+            title="Give your new list a name."
+          >
+            <input
+              type="text"
+              value={newListTitle}
+              placeholder={newListTitleError ? "List Name is required" : "List Name"}
+              onChange={(e) => setNewListTitle(e.target.value)}
+              className={`w-full p-2 border-2 border-gray-300 rounded-md ${
+                newListTitleError ? "border-red-500" : ""
+              }`}
+            />
+            <div className="mt-4 sm:absolute sm:bottom-2 border-t space-x-4 pt-4 border-gray-200 left-0 right-3 flex justify-end">
+              <button
+                className={`${modalButtonStyle}  bg-white border-2 text-gray-500 uppercase  hover:bg-gray-500 hover:text-white`}
+                onClick={() => {
+                  setNewListTitleTouched(false);
+                  setNewListTitleError(false);
+                }}
+              >
+                Cancel
+              </button>
+              {showSpinner ? (
+                <Spinner />
+              ) : (
+                <button
+                  className={`${modalButtonStyle} bg-dark-purple text-white uppercase hover:bg-dark-purple/70`}
+                  onClick={handleNewListTitle}
+                >
+                  Create
                 </button>
               )}
             </div>
