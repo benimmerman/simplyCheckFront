@@ -2,7 +2,11 @@
 
 This is the **frontend** application for **Trackly**: a collaborative organization and task-tracking app built for couples, families, and friend groups who want an easy way to stay on top of shared responsibilities, to-dos, and expenses — all in one place.
 
-[🛠️ Backend repository](https://github.com/benimmerman/tracklyBack)
+---
+
+## Backend Repository
+
+[Trackly Backend](https://github.com/benimmerman/tracklyBack)
 
 ---
 
