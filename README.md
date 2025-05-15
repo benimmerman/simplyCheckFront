@@ -29,6 +29,7 @@ The goal is to provide a solid, scalable platform for personal and shared produc
 - **React** with **Vite** (JavaScript)
 - **Redux** for state management
 - **Axios** for API communication
+- **Tailwind** for styling
 
 ### Backend
 
