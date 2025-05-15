@@ -4,12 +4,6 @@ This is the **frontend** application for **Trackly**: a collaborative organizati
 
 ---
 
-## Backend Repository
-
-[Trackly Backend](https://github.com/benimmerman/tracklyBack)
-
----
-
 ## 🚀 Motivation
 
 Managing everyday tasks and shared responsibilities often involves juggling multiple apps — one for to-do lists, another for expenses, and so on. **Trackly** was created to simplify this experience by combining the best features of several productivity tools into a single, user-friendly app designed for households and small groups.
@@ -87,6 +81,12 @@ The goal is to provide a solid, scalable platform for personal and shared produc
 ## 🤝 Contributing
 
 Contributions are welcome! If you'd like to suggest features, report bugs, or submit improvements, feel free to open an issue or pull request.
+
+---
+
+## 📂 Backend Repository
+
+[Trackly Backend](https://github.com/benimmerman/tracklyBack)
 
 ---
 
