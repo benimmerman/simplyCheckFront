@@ -1,16 +1,96 @@
-<<<<<<< HEAD
-# React + Vite
+# 📋 Trackly
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the **frontend** application for **Trackly**: a collaborative organization and task-tracking app built for couples, families, and friend groups who want an easy way to stay on top of shared responsibilities, to-dos, and expenses — all in one place.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Motivation
 
-## Expanding the ESLint configuration
+Managing everyday tasks and shared responsibilities often involves juggling multiple apps — one for to-do lists, another for expenses, and so on. **Trackly** was created to simplify this experience by combining the best features of several productivity tools into a single, user-friendly app designed for households and small groups.
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-=======
-# simplyCheckFront
->>>>>>> ef7bda97b350063028cbf38beae784a191ad181d
+The goal is to provide a solid, scalable platform for personal and shared productivity — with future versions expanding into collaborative features such as shared lists, group task assignments, and expense tracking.
+
+---
+
+## ✨ Features
+
+- ✅ Create and manage unlimited checklists  
+- 📝 Add, edit, delete, and mark checklist items as complete  
+- 💾 Persistent data storage using PostgreSQL  
+- 🔐 Secure login and authentication using JWT  
+- 🌐 Hosted with full CI/CD integration  
+
+---
+
+## 🧰 Tech Stack
+
+### Frontend
+
+- **React** with **Vite** (JavaScript)
+- **Redux** for state management
+- **Axios** for API communication
+- **Tailwind** for styling
+
+### Backend
+
+- **Django REST Framework** (Python)
+- **JWT Authentication** with access and refresh tokens
+- **PostgreSQL** for persistent data storage
+
+### Hosting & DevOps
+
+- **Render** for frontend, backend, and database hosting
+- **GitHub Integration** for CI/CD pipelines
+
+---
+
+## 📦 Getting Started
+
+1. **Sign Up**  
+   Create a new account with a username and password (email is optional).
+
+2. **Create Your First List**  
+   From the dashboard, click the ✏️ pencil icon next to **"My Dashboard"** to create a new list.
+
+3. **Start Adding Items**  
+   Once your list is created, begin adding items. You can:
+   - ✅ Mark them as complete
+   - 📝 Edit or delete them
+   - 🔄 See updates instantly and persistently
+
+4. **Repeat and Organize**  
+   Create as many lists as you'd like. All changes are saved automatically and synced across sessions.
+
+---
+
+## 🔮 Future Plans
+
+- 👫 Shareable lists for collaboration with partners, roommates, or friends  
+- 💸 Expense tracking and management between users  
+- 📅 Calendar and scheduling integration  
+- 🔔 Smart notifications and reminders  
+- 🎨 Customizable themes for personalization  
+
+---
+
+## 📸 Preview
+
+*Coming soon — screenshots and demo video*
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! If you'd like to suggest features, report bugs, or submit improvements, feel free to open an issue or pull request.
+
+---
+
+## 📂 Backend Repository
+
+[Trackly Backend](https://github.com/benimmerman/tracklyBack)
+
+---
+
+## 🛡️ License
+
+This project is licensed under the [MIT License](LICENSE).
