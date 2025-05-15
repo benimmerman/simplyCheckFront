@@ -103,12 +103,14 @@ const Login = () => {
   const createAccount = [
     {
       input: "email",
+      value: "email",
       placeholder: "Email (optional)",
       icon: <EnvelopeIcon className="text-gray-400 w-5 h-5" />,
       error: <></>,
     },
     {
       input: "username",
+      value: "username",
       placeholder: "Username",
       icon: <UserIcon className="text-gray-400 w-5 h-5" />,
       error: (
@@ -128,6 +130,7 @@ const Login = () => {
     },
     {
       input: "password",
+      value: "password",
       placeholder: "Password",
       icon: <LockClosedIcon className="text-gray-400 w-5 h-5" />,
       error: (
@@ -144,7 +147,8 @@ const Login = () => {
       ),
     },
     {
-      input: "confirmPass",
+      input: "password",
+      value: "confirmPass",
       placeholder: "Confirm Password",
       icon: <LockClosedIcon className="text-gray-400 w-5 h-5" />,
       error: (
@@ -361,15 +365,15 @@ const Login = () => {
                       onSubmit={(e) => handleFormSubmit(e, "register/")}
                       className="flex flex-col items-center w-full"
                     >
-                      {createAccount.map((item) => (
+                      {createAccount.map((item, index) => (
                         <div className="flex flex-col w-full">
                           <div className="flex w-full mb-4 items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 pb-2 shadow-sm focus-within:ring-2 focus-within:ring-dark-purple">
                             {item.icon}
                             <input
-                              onChange={(e) => updateForm(e, item.input)}
-                              value={userInfoLocal[item.input]}
+                              onChange={(e) => updateForm(e, item.value)}
+                              value={userInfoLocal[item.value]}
                               type={item.input}
-                              id={item.input}
+                              id={index}
                               placeholder={item.placeholder}
                               className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
                               onBlur={() =>
