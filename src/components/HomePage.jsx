@@ -24,6 +24,8 @@ const HomePage = () => {
   const [newListTitleTouched, setNewListTitleTouched] = useState(false);
   const [newListTitleError, setNewListTitleError] = useState(false);
 
+  console.log(newListTitleTouched);
+
   // variable to show spinner
   const [showSpinner, setShowSpinner] = useState(false);
   // reusable style for button
@@ -125,7 +127,6 @@ const HomePage = () => {
   };
 
   const handleNewListTitle = () => {
-    
     console.log("newListTitle", newListTitle.trim());
     if (newListTitle.trim() !== "" && newListTitle !== null) {
       handleNewList();
@@ -211,12 +212,14 @@ const HomePage = () => {
               setNewListTitleTouched(false);
               setNewListTitleError(false);
             }}
-            title="Give your new list a name."
+            title="Give your new list a name"
           >
             <input
               type="text"
               value={newListTitle}
-              placeholder={newListTitleError ? "List Name is required" : "List Name"}
+              placeholder={
+                newListTitleError ? "List Name is required" : "List Name"
+              }
               onChange={(e) => setNewListTitle(e.target.value)}
               className={`w-full p-2 border-2 border-gray-300 rounded-md ${
                 newListTitleError ? "border-red-500" : ""
