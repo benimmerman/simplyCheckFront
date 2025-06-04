@@ -1,11 +1,13 @@
 import React, { useRef, useEffect, useState } from "react";
 import axiosInstance from "../services/axiosInstance";
 import { TrashIcon, ExclamationCircleIcon } from "@heroicons/react/24/outline";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 // eslint-disable-next-line no-unused-vars
 import { AnimatePresence, motion } from "framer-motion";
+import { decrementTime } from "../state/countdownSlice";
 
 export const Checklist = () => {
+  const dispatch = useDispatch();
   const LISTITEMS_API_URL = "listItems/";
   const initialTouched = {
     title: false,
@@ -13,8 +15,8 @@ export const Checklist = () => {
     existingItem: false,
   };
   const inputRef = useRef(null);
-  const userInfo = useSelector((state) => state.userInfo);
-  const listInfo = useSelector((state) => state.listInfo);
+  const userInfo = useSelector((state) => state.user);
+  const listInfo = useSelector((state) => state.list);
   const [listItems, setListItems] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [listTitle, setListTitle] = useState(listInfo.listTitle);
@@ -27,6 +29,7 @@ export const Checklist = () => {
       axiosInstance
         .get(`${LISTITEMS_API_URL}${userInfo.username}/${listInfo.listId}/`)
         .then((res) => {
+          dispatch(decrementTime());
           const items = res.data.listItems.map((item) => ({
             itemName: item.itemName,
             listItemId: item.id,
@@ -38,6 +41,7 @@ export const Checklist = () => {
           setListTitle(res.data.listTitle);
         })
         .catch((err) => {
+          dispatch(decrementTime());
           if (err.response && err.response.data.message) {
             console.error("Backend message:", err.response.data.message);
             // setErrorMessage(err.response.data.message);
@@ -76,6 +80,7 @@ export const Checklist = () => {
           username: userInfo.username,
         })
         .then((res) => {
+          dispatch(decrementTime());
           setListItems([
             ...listItems,
             {
@@ -90,6 +95,7 @@ export const Checklist = () => {
           setInputValue("");
         })
         .catch((err) => {
+          dispatch(decrementTime());
           if (err.response && err.response.data.message) {
             console.error("Backend message:", err.response.data.message);
             // setErrorMessage(err.response.data.message);
@@ -111,12 +117,14 @@ export const Checklist = () => {
         params: { id: listItemId },
       })
       .then((res) => {
+        dispatch(decrementTime());
         console.log(res.data);
         const updatedListItems = [...listItems].filter(
           (item) => item.listItemId !== listItemId
         );
         setListItems(updatedListItems);
-      });
+      })
+      .catch((err) => dispatch(decrementTime()));
   };
 
   const handleItemEdit = (e, listItemId) => {
@@ -144,10 +152,12 @@ export const Checklist = () => {
           ...updatedFields,
         })
         .then((res) => {
+          dispatch(decrementTime());
           console.log(["handle save itm res:", res]);
           setTouched({ ...touched, existingItem: false });
         })
         .catch((err) => {
+          dispatch(decrementTime());
           console.error("Error updating item:", err);
         });
     }
@@ -166,10 +176,12 @@ export const Checklist = () => {
         listId: listInfo.listId,
       })
       .then((res) => {
+        dispatch(decrementTime());
         setListTitle(res.data.listTitle);
         setTouched({ ...touched, title: false });
       })
       .catch((err) => {
+        dispatch(decrementTime());
         if (err.response && err.response.data.message) {
           console.error("Backend message:", err.response.data.message);
           // setErrorMessage(err.response.data.message);
@@ -213,12 +225,14 @@ export const Checklist = () => {
         isDone: updatedIsDone,
       })
       .then(() => {
+        dispatch(decrementTime());
         const updatedList = listItems.map((item) =>
           item.listItemId === itemId ? { ...item, isDone: updatedIsDone } : item
         );
         setListItems(updatedList);
       })
       .catch((err) => {
+        dispatch(decrementTime());
         console.error("Error toggling item:", err);
       });
   };
