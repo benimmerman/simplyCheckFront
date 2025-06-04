@@ -9,20 +9,24 @@ import LoginPage from "./components/LoginPage.jsx";
 import ListPage from "./components/ListPage.jsx";
 import HomePage from "./components/HomePage.jsx";
 import Header from "./components/Header.jsx";
-// import useAutoLogout from "./hooks/AutoLogout.jsx";
-// import SessionWarningModal from "./components/SessionWarningModal.jsx";
+import SessionWarningModal from "./components/SessionWarningModal.jsx";
+import CountdownTimer from "./components/CountdownTimer.jsx";
+import { useSelector } from "react-redux";
 
 const AppWrapper = () => {
-  // const showWarning = useAutoLogout(10 * 60 * 1000); // 10 mili sec * 60 sec * 1000 = 10 min
+  const userInfo = useSelector((state) => state.user);
+  const timeLeft = useSelector((state) => state.countdown.timeLeft);
 
   const location = useLocation();
   const hiddenHeaderOn = ["/"];
   const showHeader = !hiddenHeaderOn.includes(location.pathname);
+  console.log(timeLeft);
 
   return (
     <>
       {showHeader && <Header />}
-      {/* {showWarning && <SessionWarningModal />} */}
+      {userInfo?.username && <CountdownTimer />}
+      {timeLeft <= 800 && userInfo?.username && <SessionWarningModal />}
       <div
         className={`${
           showHeader && "pt-16 overflow-y-auto "
