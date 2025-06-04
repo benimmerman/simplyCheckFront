@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../state/userSlice";
 import axiosInstance from "../services/axiosInstance";
 
-const Header = () => {
+const Header = memo(() => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -27,20 +27,24 @@ const Header = () => {
 
     setHideTimeout(timeout);
   };
-
-  const userInfo = useSelector((state) => state.userInfo);
+  const userInfo = useSelector((state) => state.user);
+  console.log(userInfo);
 
   const handleLogout = async () => {
     try {
-      await axiosInstance.post("api/token/logout/", {
-        refresh: localStorage.getItem("refresh_token"),
-      });
+      await axiosInstance
+        .post("api/token/logout/", {
+          refresh: localStorage.getItem("refresh_token"),
+        })
+        .then(() => {
+          dispatch(logoutUser());
+        })
+        .catch(() => dispatch(logoutUser()));
     } catch (err) {
       console.error("Logout error:", err);
     }
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
-    dispatch(logoutUser());
     navigate("/");
   };
 
@@ -74,7 +78,7 @@ const Header = () => {
               }`}
             >
               <div className="px-4 py-2 text-xs text-gray-400">
-                User {userInfo.username}
+                User {userInfo?.username}
               </div>
               <div
                 className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
@@ -88,6 +92,8 @@ const Header = () => {
       </header>
     </>
   );
-};
+});
+
+Header.displayName = "Header";
 
 export default Header;
