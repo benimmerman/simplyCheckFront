@@ -8,6 +8,7 @@ import { selectList } from "../state/listSlice";
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import Modal from "./helpers/Modal";
 import { Spinner } from "./helpers/Spinner";
+import { decrementTime } from "../state/countdownSlice";
 
 const HomePage = () => {
   const HOME_API_URL = "home/";
@@ -15,7 +16,7 @@ const HomePage = () => {
   const DELETE_LIST_API_URL = "list/";
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const userInfo = useSelector((state) => state.userInfo);
+  const userInfo = useSelector((state) => state.user);
   const [userLists, setUserLists] = useState({});
   const [showModal, setshowModal] = useState(false);
   const [deleteIndex, setDeleteIndex] = useState(null);
@@ -23,8 +24,6 @@ const HomePage = () => {
   const [newListTitle, setNewListTitle] = useState("");
   const [newListTitleTouched, setNewListTitleTouched] = useState(false);
   const [newListTitleError, setNewListTitleError] = useState(false);
-
-  console.log(newListTitleTouched);
 
   // variable to show spinner
   const [showSpinner, setShowSpinner] = useState(false);
@@ -46,9 +45,11 @@ const HomePage = () => {
         .get(HOME_API_URL)
         .then((res) => {
           setUserLists(res.data.lists);
+          dispatch(decrementTime());
           // console.log(['userLists', userLists])
         })
         .catch((err) => {
+          dispatch(decrementTime());
           console.error("Failed to fetch home data", err);
         });
     }
@@ -69,9 +70,10 @@ const HomePage = () => {
             fromNewList: true,
           })
         );
+        dispatch(decrementTime());
         navigate("/list");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => dispatch(decrementTime()));
   };
 
   // function to view list selected
@@ -102,8 +104,10 @@ const HomePage = () => {
         // hide spinner and modal
         setShowSpinner(false);
         setshowModal(false);
+        dispatch(decrementTime());
       })
       .catch((err) => {
+        dispatch(decrementTime());
         // hide spinner and modal
         setShowSpinner(false);
         setshowModal(false);
