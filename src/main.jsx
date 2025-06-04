@@ -11,12 +11,14 @@ axiosInstance.defaults.withCredentials = true;
 
 // Register Service Worker for PWA
 if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker
-      .register("/service-worker.js")
-      .then((reg) => console.log("Service Worker registered", reg))
-      .catch((err) => console.error("Service Worker registration failed", err));
-  });
+  // Only unregister in development
+  if (import.meta.env.DEV) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      registrations.forEach((registration) => {
+        registration.unregister();
+      });
+    });
+  }
 }
 
 createRoot(document.getElementById("root")).render(
