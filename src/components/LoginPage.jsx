@@ -12,6 +12,7 @@ import {
 } from "@heroicons/react/24/solid";
 import { Spinner } from "./helpers/Spinner";
 import { AlertBanner } from "./helpers/Alerts";
+import { decrementTime } from "../state/countdownSlice";
 
 const Login = () => {
   // create navigate to use for nav
@@ -70,6 +71,7 @@ const Login = () => {
     axiosInstance
       .post(API_URL, payload)
       .then((res) => {
+        dispatch(decrementTime());
         // hide spinner show button
         setShowSpinner(false);
         localStorage.setItem("access_token", res.data.access);
@@ -83,7 +85,9 @@ const Login = () => {
         console.log(localStorage["access_token"]);
         navigate("/home");
       })
+
       .catch((err) => {
+        dispatch(decrementTime());
         // hide spinner show button
         setShowSpinner(false);
         console.log(err);
@@ -167,7 +171,6 @@ const Login = () => {
     },
   ];
 
-  console.log(errorMessage);
   return (
     <>
       <div className="flex h-screen w-screen bg-page/30 items-center justify-center ">
